@@ -43,6 +43,9 @@ function AddLootListToToolTip(Tooltip, itemName)
     elseif itemName == "broken boar tusk" and IsAltKeyDown() then
         Tooltip:AddLine("1: Goblin Loot" ,1,0,0)
         Tooltip:Show()
+    elseif IsAltKeyDown() then
+        Tooltip:AddLine("1: Free Roll" ,1,0,0)
+        Tooltip:Show()
     end
 end
 
