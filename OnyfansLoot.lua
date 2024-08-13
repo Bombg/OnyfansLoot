@@ -48,8 +48,6 @@ self:SecureHook(GameTooltip, "SetLootItem", function(this, slot)
         local itemName, itemstring, quality, level, class, subclass, max_stack, slot, texture = GetItemInfo(itemLink)
             if itemName then
                 AddLootListToToolTip(ItemRefTooltip, string.lower(itemName))
-            else
-                print("penis")
             end
     end)
 
