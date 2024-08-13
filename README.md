@@ -10,15 +10,15 @@ The loot list addon for OnyFans
 ## Screenshots & Gifs
 - Holding Alt over an inventory item
 
-<img src="https://i.imgur.com/B7ki26u.gif" width = 200><br><br>
+<img src="https://i.imgur.com/B7ki26u.gif" width =400><br><br>
 
 - Holding Alt while clicking a chat link
 
-<img src="https://i.imgur.com/4FZsbb9.gif" width = 200 ><br><br>
+<img src="https://i.imgur.com/4FZsbb9.gif" width =400><br><br>
 
 - Holding Alt while hovering over mob loot
 
-<img src="https://imgur.com/2NKiDRo.gif" width = 200><br><br>
+<img src="https://imgur.com/2NKiDRo.gif" width =400><br><br>
 
 ## Installation
 1. Download OnyFans Loot
