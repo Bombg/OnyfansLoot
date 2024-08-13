@@ -26,7 +26,7 @@ The loot list addon for OnyFans
 3. Rename the unzipped folder to "OnyfansLoot"
 4. Copy or cut the now renamed "OnyfansLoot" and paste it into Interface\AddOns
 5. Move RenameMeToJustOnyfansLoot.lua to  '\WTF\Account\Account Name\SavedVariables'
-6. RenameMeToJustOnyfansLoot.lua to OnyfansLoot.lua
+6. Rename RenameMeToJustOnyfansLoot.lua to OnyfansLoot.lua
 5. Restart World of Warcraft 
 
 ## Limitations
