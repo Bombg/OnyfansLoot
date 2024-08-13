@@ -32,5 +32,6 @@ The loot list addon for OnyFans
 ## Limitations
 - If any of the items in the loot list or master loot list are misspelled this won't work
 - For now, this does not update the list when people get items from their list
+- Every time the list is updated the OnyfansLoot.lua in '\WTF\Account\Account Name\SavedVariables' needs to be updated
 
 
