@@ -40,6 +40,9 @@ function AddLootListToToolTip(Tooltip, itemName)
             Tooltip:AddLine(i .. ":" .. OfLoot[itemName][i],1,0,0)
         end
         Tooltip:Show()
+    elseif itemName == "broken boar tusk" and IsAltKeyDown() then
+        Tooltip:AddLine("1: Goblin Loot" ,1,0,0)
+        Tooltip:Show()
     end
 end
 
@@ -47,7 +50,7 @@ self:SecureHook(GameTooltip, "SetLootItem", function(this, slot)
         local itemLink = ItemLinkToItemString(GetLootSlotLink(slot))
         local itemName, itemstring, quality, level, class, subclass, max_stack, slot, texture = GetItemInfo(itemLink)
             if itemName then
-                AddLootListToToolTip(ItemRefTooltip, string.lower(itemName))
+                AddLootListToToolTip(GameTooltip, string.lower(itemName))
             end
     end)
 
