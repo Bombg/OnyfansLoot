@@ -25,9 +25,12 @@ The loot list addon for OnyFans
 2. Unzip
 3. Rename the unzipped folder to "OnyfansLoot"
 4. Copy or cut the now renamed "OnyfansLoot" and paste it into Interface\AddOns
+
+*** 5-6 is now optional. The addon will now grab updated lists from guildmates in game ***
+
 5. Move RenameMeToJustOnyfansLoot.lua to  '\WTF\Account\Account Name\SavedVariables'
 6. Rename RenameMeToJustOnyfansLoot.lua to OnyfansLoot.lua
-5. Restart World of Warcraft 
+7. Restart World of Warcraft 
 
 ## Limitations
 - If any of the items in the loot list or master loot list are misspelled this won't work
