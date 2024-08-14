@@ -16,7 +16,7 @@ The loot list addon for OnyFans
 
 <img src="https://i.imgur.com/4FZsbb9.gif" width =400><br><br>
 
-- Holding Alt while hovering over mob loot
+- Holding Alt before hovering over mob loot
 
 <img src="https://imgur.com/2NKiDRo.gif" width =400><br><br>
 
