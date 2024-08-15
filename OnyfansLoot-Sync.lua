@@ -9,6 +9,7 @@ OnyFansLoot.listSharePrefix = "ofloot"
 OnyFansLoot.listAskPrefix = "oflootask"
 OnyFansLoot.addonVersionBroadcastPrefix = "ofversion"
 local versionRebroadcastTime = 180
+local versionWarned = false
 
 
 
@@ -62,8 +63,9 @@ OfSync:SetScript("OnEvent", function ()
             end
         elseif prefix and prefix == OnyFansLoot.addonVersionBroadcastPrefix then
             local _,broadcastedAddonVersion = StrSplit(":",message)
-            if tonumber(broadcastedAddonVersion) > addonVersion then
+            if tonumber(broadcastedAddonVersion) > addonVersion and not versionWarned then
                 DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000[OnyFansLoot]|r New version available! Check OnyFans Discord")
+                versionWarned = true
             end
         end
     end
