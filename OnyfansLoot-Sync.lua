@@ -7,6 +7,7 @@ OnyFansLoot.lastBroadcast = 0
 OnyFansLoot.listVersionBroadcastPrefix = "oflootlist"
 OnyFansLoot.listSharePrefix = "ofloot"
 OnyFansLoot.listAskPrefix = "oflootask"
+OnyFansLoot.addonVersionBroadcastPrefix = "ofversion"
 local versionRebroadcastTime = 180
 
 
@@ -39,13 +40,16 @@ OfSync:SetScript("OnEvent", function ()
     if event == "GUILD_ROSTER_UPDATE"  and (time() - OnyFansLoot.lastBroadcast) > versionRebroadcastTime then
         OnyFansLoot.lastBroadcast = time()
         local listVersion = GetListVersion(OfLoot)
+        local addonVersion = GetLocalAddonVersion()
         SendAddonMessage(OnyFansLoot.listVersionBroadcastPrefix, "LIST_VERSION:" .. listVersion, "GUILD")
+        SendAddonMessage(OnyFansLoot.addonVersionBroadcastPrefix, "VERSION:" .. addonVersion, "GUILD")
     elseif event == "CHAT_MSG_ADDON" then
         local prefix = arg1
         local message = arg2
         local distributionType = arg3  --"PARTY", "RAID", "GUILD", "BATTLEGROUND"
         local sender = arg4
         local localListVersion = GetListVersion(OfLoot)
+        local addonVersion = GetLocalAddonVersion()
         if prefix and prefix == OnyFansLoot.listVersionBroadcastPrefix then
             local _,broadcastedListVersion = StrSplit(":",message)
             if tonumber(broadcastedListVersion) > localListVersion then
@@ -55,6 +59,11 @@ OfSync:SetScript("OnEvent", function ()
             local _,askVersion, requestFrom = StrSplit(":",message)
             if localListVersion == tonumber(askVersion) and requestFrom == OnyFansLoot.playerName then
                 SendLootList(sender)
+            end
+        elseif prefix and prefix == OnyFansLoot.addonVersionBroadcastPrefix then
+            local _,broadcastedAddonVersion = StrSplit(":",message)
+            if tonumber(broadcastedAddonVersion) > addonVersion then
+                DEFAULT_CHAT_FRAME:AddMessage("|cffbe5eff[OnyFansLoot]|r New version available! Check OnyFans discord")
             end
         end
     end

@@ -70,3 +70,9 @@ function IsAllowedToHaveList() -- Tier 1's have lists so nevermind. Not quite as
     end
     return allowed
 end
+function GetLocalAddonVersion()
+    --Update announcing code taken from pfUI
+    local major, minor, fix = StrSplit(".", tostring(GetAddOnMetadata("OnyFansLoot", "Version")))
+    local localVersion  = tonumber(major*10000 + minor*100 + fix)
+    return localVersion
+end
