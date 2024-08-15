@@ -54,3 +54,19 @@ function GetListVersion(table)
     end
     return localListVersion
 end
+
+function GetGuildRank(playerUnitId)
+    local guildName, guildRank, rankIndex  = GetGuildInfo(playerUnitId)
+    return guildRank
+end
+
+function IsAllowedToHaveList() -- Tier 1's have lists so nevermind. Not quite as simple as making it rank limited. Maybe come back to this later. 1  = GM, 2 = Twitch Mod, 3 = Foot Model, 4 = Tier 2
+    local allowed = false
+    for i = 1,4 do
+        if GetGuildRank("player") == GuildControlGetRankName(i) then
+            allowed = true
+            break
+        end
+    end
+    return allowed
+end
