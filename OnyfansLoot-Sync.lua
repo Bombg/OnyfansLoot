@@ -63,7 +63,7 @@ OfSync:SetScript("OnEvent", function ()
         elseif prefix and prefix == OnyFansLoot.addonVersionBroadcastPrefix then
             local _,broadcastedAddonVersion = StrSplit(":",message)
             if tonumber(broadcastedAddonVersion) > addonVersion then
-                DEFAULT_CHAT_FRAME:AddMessage("|cffbe5eff[OnyFansLoot]|r New version available! Check OnyFans discord")
+                DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000[OnyFansLoot]|r New version available! Check OnyFans Discord")
             end
         end
     end
