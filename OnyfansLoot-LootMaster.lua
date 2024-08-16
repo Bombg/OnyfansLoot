@@ -20,7 +20,7 @@ OfLootMaster:SetScript("OnEvent", function ()
                     lootDropString = lootDropString .. GetLootSlotLink(i) .. " "
                 end
             end
-            if not IsEmptyString(lootDropString) and (time() - lootedTargetsTime[unitName]) > timeBetweenLootBroadcast  then
+            if not IsEmptyString(lootDropString) and (time() - lootedTargetsTime[unitName]) > timeBetweenLootBroadcast and GetNumRaidMembers() > 0  then
                 lootedTargetsTime[unitName] = time()
                 SendChatMessage( lootDropString,"RAID")
             end
