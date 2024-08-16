@@ -8,7 +8,9 @@ local function SetItemRefHook(link,name,button)
             if (ItemRefTooltip:IsVisible()) then
                 if (not DressUpFrame:IsVisible()) then
                     local itemName, itemstring, quality, level, class, subclass, max_stack, slot, texture = GetItemInfo(link)
-                    AddLootListToToolTip(ItemRefTooltip, string.lower(itemName))
+                    if itemName then
+                        AddLootListToToolTip(ItemRefTooltip, string.lower(itemName)) 
+                    end
                 end
                 ItemRefTooltip.isDisplayDone = nil
             end
