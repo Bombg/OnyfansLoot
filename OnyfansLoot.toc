@@ -2,11 +2,10 @@
 ## Title: Onyfans Loot
 ## Notes: An addons that shows whose up next for loot
 ## Author: Bombg
-## Version: 0.2.4
+## Version: 0.2.5
 ## SavedVariables: OfLoot
 
 # main
-
 Libs\LibStub\LibStub.lua
 Libs\AceLibrary\AceLibrary.lua
 Libs\AceOO-2.0\AceOO-2.0.lua
