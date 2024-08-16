@@ -1,13 +1,17 @@
 local OfLootMaster = CreateFrame("Frame")
 local minRarityForAnnouncement = 4
-local lastLootBroadcast = 0
 local timeBetweenLootBroadcast = 180
+local lootedTargetsTime = {}
 
 
 OfLootMaster:RegisterEvent("LOOT_OPENED")
 OfLootMaster:SetScript("OnEvent", function ()
     
     if event == "LOOT_OPENED" then
+        local unitName = UnitName("target")
+        if not DoesTableContain(lootedTargetsTime, unitName) then
+            lootedTargetsTime[unitName] = 0
+        end
         if IsAllowedToAnnounceLoot() then
             local lootDropString = ""
             for i = 1, GetNumLootItems() do
@@ -16,8 +20,8 @@ OfLootMaster:SetScript("OnEvent", function ()
                     lootDropString = lootDropString .. GetLootSlotLink(i) .. " "
                 end
             end
-            if not IsEmptyString(lootDropString) and (time() - lastLootBroadcast) > timeBetweenLootBroadcast  then
-                lastLootBroadcast = time()
+            if not IsEmptyString(lootDropString) and (time() - lootedTargetsTime[unitName]) > timeBetweenLootBroadcast  then
+                lootedTargetsTime[unitName] = time()
                 SendChatMessage( lootDropString,"RAID")
             end
             
