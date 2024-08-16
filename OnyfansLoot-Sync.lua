@@ -18,7 +18,7 @@ OnyFansLoot:RegisterComm(OnyFansLoot.listSharePrefix,function (prefix, message, 
     if success and GetListVersion(OfLoot) < GetListVersion(data) then
         local entries = NumTableEntries(data)
         if entries == data['version'][3] then
-            print(sender .. " Sent you OF loot list Version: " .. GetListVersion(data))
+            print(sender .. " Sent you OF loot list Version: " .. tostring(GetListVersion(data)) .. " Replacing list version: " .. tostring(GetListVersion(OfLoot)))
             OfLoot =  data
         end
     end

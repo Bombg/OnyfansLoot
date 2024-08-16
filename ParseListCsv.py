@@ -5,15 +5,22 @@ namePosition = 0
 lootPosition = 6
 lootToName = {}
 csvArray = []
+versionArr = []
 
-with open("OFLootList-8-11-24.csv", mode = 'r') as file:
+
+listVersion = 2
+listDateTime = "8-15-24:10:34"
+
+
+with open("OFLootList-8-15-24.csv", mode = 'r') as file:
     csvFile = csv.reader(file)
     headers = next(csvFile)
     for line in csvFile:
         csvArray.append(line)
         for i in range(lootPosition,len(line)):
             if ''.join(line[i]).strip():
-                lootToName[line[i].strip().lower()] = []
+                lootToName[line[i].strip().strip("[").strip("]").lower()] = []
+                print(line[i].strip().strip("[").strip("]").lower())
 
 for i in range(lootPosition,25):
     rollString = {}
@@ -24,9 +31,11 @@ for i in range(lootPosition,25):
             else:
                 rollString[line[i].strip().lower()] = rollString[line[i].strip().lower()] + line[0] + ", "
     for k, v in rollString.items():
-        lootToName[k].append(v.strip().rstrip(','))
+        lootToName[k.strip("[").strip("]")].append(v.strip().rstrip(','))
 
-
+versionArr.append(listVersion)
+versionArr.append(listDateTime)
+lootToName["version"] = versionArr
 f = open("LuaTable.txt",mode = "w")
 f.write(lua.encode(lootToName))
 f.close()
