@@ -105,7 +105,6 @@ function CallbackHandler:New(target, RegisterName, UnregisterName, UnregisterAll
 
 	-- registry:Fire() - fires the given event/message into the registry
 	function registry:Fire(eventname, argc, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10)
-		print("fire")
 		if not rawget(events, eventname) or not next(events[eventname]) then return end
 		local oldrecurse = registry.recurse
 		registry.recurse = oldrecurse + 1
