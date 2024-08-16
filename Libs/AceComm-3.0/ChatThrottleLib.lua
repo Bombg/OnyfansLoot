@@ -221,7 +221,7 @@ function ChatThrottleLib:Init()
 	self.Frame:SetScript("OnEvent", self.OnEvent);	-- v11: Monitor P_E_W so we can throttle hard for a few seconds
 	self.Frame:RegisterEvent("PLAYER_ENTERING_WORLD");
 	self.OnUpdateDelay=0;
-  self.TurtleChatLinesAvailable=TURTLE_MAX_CHAT_LINES_PER_SECOND;
+	self.TurtleChatLinesAvailable=TURTLE_MAX_CHAT_LINES_PER_SECOND;
 	self.LastAvailUpdate=GetTime();
 	self.HardThrottlingBeginTime=GetTime();	-- v11: Throttle hard for a few seconds after startup
 
@@ -250,7 +250,7 @@ function ChatThrottleLib.Hook_SendChatMessage(text, chattype, language, destinat
 	local size = strlen(tostring(text or "")) + strlen(tostring(chattype or "")) + strlen(tostring(destination or "")) + 40;
 	self.avail = self.avail - size;
 	self.nBypass = self.nBypass + size;
-  self.TurtleSendChat()
+	self.TurtleSendChat()
 	return self.ORIG_SendChatMessage(text, chattype, language, destination);
 end
 function ChatThrottleLib.Hook_SendAddonMessage(prefix, text, chattype)
@@ -294,18 +294,18 @@ end
 -- Despooling logic
 function ChatThrottleLib.TurtleSendChat()
 	self = ChatThrottleLib;
-  self.TurtleChatLinesAvailable = self.TurtleChatLinesAvailable - 1
-  -- Showing the frame will start to build back the available buffer and re-hide when max lines are available
-  self.Frame:Show();
+	self.TurtleChatLinesAvailable = self.TurtleChatLinesAvailable - 1
+	-- Showing the frame will start to build back the available buffer and re-hide when max lines are available
+	self.Frame:Show();
 end
 
 function ChatThrottleLib.IsTurtleSendChatReady()
 	self = ChatThrottleLib;
-  if self.TurtleChatLinesAvailable > 1 then
-    return true
-  end
-  -- print("Chat Throttled")
-  return false
+	if self.TurtleChatLinesAvailable > 1 then
+    	return true
+	end
+	-- print("Chat Throttled")
+	return false
 end
 
 function ChatThrottleLib:Despool(Prio)
@@ -346,9 +346,9 @@ function ChatThrottleLib.OnUpdate()
 	if(self.OnUpdateDelay < 0.08) then
 		return;
 	end
-  if self.TurtleChatLinesAvailable < TURTLE_MAX_CHAT_LINES_PER_SECOND then
-    self.TurtleChatLinesAvailable = math.min(self.TurtleChatLinesAvailable + self.OnUpdateDelay * TURTLE_MAX_CHAT_LINES_PER_SECOND, TURTLE_MAX_CHAT_LINES_PER_SECOND)
-  end
+	if self.TurtleChatLinesAvailable < TURTLE_MAX_CHAT_LINES_PER_SECOND then
+    	self.TurtleChatLinesAvailable = math.min(self.TurtleChatLinesAvailable + self.OnUpdateDelay * TURTLE_MAX_CHAT_LINES_PER_SECOND, TURTLE_MAX_CHAT_LINES_PER_SECOND)
+	end
 	self.OnUpdateDelay = 0;
 
 	self:UpdateAvail();
@@ -428,7 +428,6 @@ function ChatThrottleLib:SendChatMessage(prio, prefix, text, chattype, language,
 	prefix = prefix or tostring(this);		-- each frame gets its own queue if prefix is not given
 
 	local nSize = strlen(text) + MSG_OVERHEAD;
-	print(strlen(text))
 
 	-- Check if there's room in the global available bandwidth gauge to send directly
 	if(not self.bQueueing and nSize < self:UpdateAvail() and self.IsTurtleSendChatReady()) then
@@ -472,7 +471,7 @@ function ChatThrottleLib:SendAddonMessage(prio, prefix, text, chattype)
 	-- Message needs to be queued
 	msg=self.MsgBin:Get();
 	msg.f=self.ORIG_SendAddonMessage;
-  msg.type="addon";
+	msg.type="addon";
 	msg[1]=prefix;
 	msg[2]=text;
 	msg[3]=chattype;

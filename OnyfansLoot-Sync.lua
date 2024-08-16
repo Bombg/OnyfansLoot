@@ -18,7 +18,7 @@ OnyFansLoot:RegisterComm(OnyFansLoot.listSharePrefix,function (prefix, message, 
     if success and GetListVersion(OfLoot) < GetListVersion(data) then
         local entries = NumTableEntries(data)
         if entries == data['version'][3] then
-            print(sender .. " Sent you OF loot list Version: " .. tostring(GetListVersion(data)) .. " Replacing list version: " .. tostring(GetListVersion(OfLoot)))
+            DEFAULT_CHAT_FRAME:AddMessage(sender .. " Sent you OF loot list Version: " .. tostring(GetListVersion(data)) .. " Replacing list version: " .. tostring(GetListVersion(OfLoot)))
             OfLoot =  data
         end
     end
@@ -30,7 +30,7 @@ function SendLootList(sharee)
     OfLoot["version"][3] = NumTableEntries(OfLoot)
     local text = OnyFansLoot:Serialize(OfLoot)
     local target = nil
-    print("Sharing OF loot list with needy bitch " .. sharee)
+    DEFAULT_CHAT_FRAME:AddMessage("Sharing OF loot list with needy bitch " .. sharee)
     local destination ="GUILD" --"PARTY", "RAID", "GUILD", "BATTLEGROUND"
     OnyFansLoot:SendCommMessage(prefix, text, destination, target)
 end
