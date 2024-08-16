@@ -9,6 +9,7 @@ OnyFansLoot.listSharePrefix = "ofloot"
 OnyFansLoot.listAskPrefix = "oflootask"
 OnyFansLoot.addonVersionBroadcastPrefix = "ofversion"
 local versionRebroadcastTime = 180
+local lastAsk = 0
 local versionWarned = false
 
 
@@ -53,7 +54,8 @@ OfSync:SetScript("OnEvent", function ()
         local addonVersion = GetLocalAddonVersion()
         if prefix and prefix == OnyFansLoot.listVersionBroadcastPrefix then
             local _,broadcastedListVersion = StrSplit(":",message)
-            if tonumber(broadcastedListVersion) > localListVersion then
+            if tonumber(broadcastedListVersion) > localListVersion and (time() - lastAsk) > versionRebroadcastTime then
+                lastAsk = time()
                 SendAddonMessage(OnyFansLoot.listAskPrefix, "ASK:" .. broadcastedListVersion .. ":" .. sender, "GUILD")
             end
         elseif prefix and prefix == OnyFansLoot.listAskPrefix then
