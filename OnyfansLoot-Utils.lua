@@ -15,6 +15,19 @@ function ItemLinkToItemString(ItemLink)
 end
 
 function DoesTableContain(table, contains)
+    local isContained = false
+    if table and contains and type(table) == 'table' then
+        for k, v in pairs(table) do
+            if k == contains then
+                isContained = true
+                break
+            end
+        end
+    end
+    return isContained
+end
+
+function GetNumEntries(table, contains)
     local numEntries = 0
     if not table then return end
     if not contains then return end
@@ -49,7 +62,7 @@ end
 
 function GetListVersion(table)
     local localListVersion = 0
-    if not IsTableEmpty(table) and  DoesTableContain(table, "version") ~= 0 then
+    if not IsTableEmpty(table) and  GetNumEntries(table, "version") ~= 0 then
         localListVersion = table["version"][1]
     end
     return localListVersion
@@ -75,4 +88,61 @@ function GetLocalAddonVersion()
     local major, minor, fix = StrSplit(".", tostring(GetAddOnMetadata("OnyFansLoot", "Version")))
     local localVersion  = tonumber(major*10000 + minor*100 + fix)
     return localVersion
+end
+
+function IsRaidSetToMasterLoot()
+    local lootmethod, masterlooterPartyID, masterlooterRaidID = GetLootMethod() -- raidID doesn't work. PartyID = 0 if player is master, 1-4 if master in party. nil if not in party or not used
+    local isMaster = false
+    if lootmethod and lootmethod == "master" then
+        isMaster = true
+    end
+    return isMaster
+end
+
+function IsPlayerMasterLooter()
+    local lootmethod, masterlooterPartyID, masterlooterRaidID = GetLootMethod() -- raidID doesn't work. PartyID = 0 if player is master, 1-4 if master in party. nil if not in party or not used
+    local isMaster = false
+    if masterlooterPartyID and masterlooterPartyID == 0 then
+        isMaster = true
+    end
+    return isMaster
+end
+
+function IsAssistant()
+    local index = GetRaidIndex(OnyFansLoot.playerName)
+    local name, rank, subgroup, level, class, fileName, zone, online = GetRaidRosterInfo(index)
+    local IsAssistant = false
+    -- 2 = raid leader, 1 = assistant, 0 normal
+    if rank > 0 then
+        IsAssistant =true
+    end
+    return IsAssistant
+end
+
+function GetRaidIndex(unitName)
+    local raidIndex = 0
+    if UnitInRaid("player") == 1 then
+        for i = 1, GetNumRaidMembers() do
+            if UnitName("raid"..i) == unitName then
+                raidIndex = i
+            end
+        end
+    end
+    return raidIndex
+end
+
+function IsAllowedToAnnounceLoot()
+    local isAllowed = false
+    if IsRaidSetToMasterLoot() and IsPlayerMasterLooter() and UnitIsDead("target") == 1 then
+        isAllowed = true
+    end
+    return isAllowed
+end
+
+function IsEmptyString(string)
+    local isEmpty = false
+    if string == nil or string == '' then
+        isEmpty = true
+    end
+    return isEmpty
 end

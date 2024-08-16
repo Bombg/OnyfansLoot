@@ -18,7 +18,7 @@ end
 OnyFansLoot:SecureHook("SetItemRef",SetItemRefHook)
 
 function AddLootListToToolTip(Tooltip, itemName)
-    local numEntries = DoesTableContain(OfLoot,itemName)
+    local numEntries = GetNumEntries(OfLoot,itemName)
     local listVersion = GetListVersion(OfLoot)
     if numEntries and itemName and numEntries > 0 and IsAltKeyDown() then
         CheckVersionAddLine(listVersion,Tooltip)
