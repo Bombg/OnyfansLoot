@@ -24,8 +24,6 @@ OfLootMaster:SetScript("OnEvent", function ()
                 lootedTargetsTime[unitName] = time()
                 SendChatMessage( lootDropString,"RAID")
             end
-            
         end
     end
 end)
-

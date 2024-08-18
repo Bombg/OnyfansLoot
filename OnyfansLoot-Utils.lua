@@ -146,3 +146,22 @@ function IsEmptyString(string)
     end
     return isEmpty
 end
+
+function GetNameItemLinkFromLootMsg(lootMsg)
+    local regex = "(.-) receives? loot: (.-)%."
+    local name, itemLink = string.match(lootMsg, regex)
+    name = name ~= "You" and name or OnyFansLoot.playerName
+    return name, itemLink
+end
+
+function GetItemLinkParts(itemLink)
+    local regex = "|cff(.-)|H(item:.-)|h%[(.-)%]|h|r"
+    local hexColor, itemString, itemName = string.match(itemLink, regex)
+    return hexColor, itemString, itemName
+end
+
+function GetItemStringParts(ItemString)
+    local regex = "item:(%d+):(%d+):(%d+):(%d+)"
+    local itemId, enchantId, suffixId, uniqueId = string.match(ItemString, regex)
+    return itemId, enchantId, suffixId, uniqueId
+end
