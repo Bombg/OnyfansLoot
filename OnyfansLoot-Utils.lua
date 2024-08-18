@@ -133,7 +133,7 @@ end
 
 function IsAllowedToAnnounceLoot()
     local isAllowed = false
-    if IsRaidSetToMasterLoot() and IsPlayerMasterLooter() and UnitIsDead("target") == 1 then
+    if IsRaidSetToMasterLoot() and IsPlayerMasterLooter() then
         isAllowed = true
     end
     return isAllowed

@@ -8,11 +8,11 @@ OfLootMaster:RegisterEvent("LOOT_OPENED")
 OfLootMaster:SetScript("OnEvent", function ()
     
     if event == "LOOT_OPENED" then
-        local unitName = UnitName("target")
-        if unitName and not DoesTableContain(lootedTargetsTime, unitName) then
+        local unitName = UnitName("target") or "container"
+        if unitName  and not DoesTableContain(lootedTargetsTime, unitName) then
             lootedTargetsTime[unitName] = 0
         end
-        if unitName and IsAllowedToAnnounceLoot() then
+        if IsAllowedToAnnounceLoot() then
             local lootDropString = ""
             for i = 1, GetNumLootItems() do
                 local lootIcon, lootName, lootQuantity, rarity, locked, isQuestItem, questId, isActive = GetLootSlotInfo(i)
@@ -20,7 +20,7 @@ OfLootMaster:SetScript("OnEvent", function ()
                     lootDropString = lootDropString .. GetLootSlotLink(i) .. " "
                 end
             end
-            if not IsEmptyString(lootDropString) and (time() - lootedTargetsTime[unitName]) > timeBetweenLootBroadcast and GetNumRaidMembers() > 0  then
+            if unitName and not IsEmptyString(lootDropString) and (time() - lootedTargetsTime[unitName]) > timeBetweenLootBroadcast and GetNumRaidMembers() > 0  then
                 lootedTargetsTime[unitName] = time()
                 SendChatMessage( lootDropString,"RAID")
             end
