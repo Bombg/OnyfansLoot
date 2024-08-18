@@ -1,0 +1,28 @@
+-- local OfLootDrops = CreateFrame("Frame")
+
+-- OfLootDrops:RegisterEvent("CHAT_MSG_LOOT")
+-- OfLootDrops:SetScript("OnEvent", function ()
+--     local chatMsg = arg1
+--     local lineId = arg2 -- If this is unique across clients I can probably use this to my advantage
+--     if event == "CHAT_MSG_LOOT" then -- TODO: Add back raid check
+--         print("testies")
+--         local regex = "(%a-) receive"
+--         if string.find(chatMsg, regex) then
+--             local playerName, itemLink = GetNameItemLinkFromLootMsg(chatMsg)
+--             local hexColor, itemString, itemName = GetItemLinkParts(itemLink)
+--             local itemId, enchantId, suffixId, uniqueId = GetItemStringParts(itemString)
+--             itemName = string.lower(itemName)
+--             if DoesTableContain(OfLoot, itemName) then
+--                 local raidDate = date("%m-%d-%y")
+--                 local zoneName = GetRealZoneText()
+--                 local raidKey = raidDate .. " " .. zoneName
+--                 local itemToPersonTable  = {}
+--                 itemToPersonTable[itemName] = string.lower(playerName)
+--                 if not DoesTableContain(OfDrops, raidKey) then
+--                     OfDrops[raidKey] = {}
+--                 end
+--                 table.insert(OfDrops[raidKey], itemToPersonTable)
+--             end
+--         end
+--     end
+-- end)
