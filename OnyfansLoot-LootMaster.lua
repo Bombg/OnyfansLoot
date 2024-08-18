@@ -1,5 +1,6 @@
 local OfLootMaster = CreateFrame("Frame")
 local minRarityForAnnouncement = 4
+local minRarityToGroupWith = 3
 local timeBetweenLootBroadcast = 180
 local lootedTargetsTime = {}
 
@@ -14,12 +15,18 @@ OfLootMaster:SetScript("OnEvent", function ()
         end
         if IsAllowedToAnnounceLoot() then
             local lootDropString = ""
+            local blueDropstring = ""
+            local isEpic = false
             for i = 1, GetNumLootItems() do
                 local lootIcon, lootName, lootQuantity, rarity, locked, isQuestItem, questId, isActive = GetLootSlotInfo(i)
                 if rarity >= minRarityForAnnouncement then
                     lootDropString = lootDropString .. GetLootSlotLink(i) .. " "
+                    isEpic = true
+                elseif rarity >= minRarityToGroupWith then
+                    blueDropstring = blueDropstring .. GetLootSlotLink(i) .. " "
                 end
             end
+            lootDropString = isEpic and lootDropString .. blueDropstring or lootDropString
             if unitName and not IsEmptyString(lootDropString) and (time() - lootedTargetsTime[unitName]) > timeBetweenLootBroadcast and GetNumRaidMembers() > 0  then
                 lootedTargetsTime[unitName] = time()
                 SendChatMessage( lootDropString,"RAID")
