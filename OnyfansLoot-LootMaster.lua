@@ -27,7 +27,7 @@ OfLootMaster:SetScript("OnEvent", function ()
                 end
             end
             lootDropString = isEpic and lootDropString .. blueDropstring or lootDropString
-            if unitName and not IsEmptyString(lootDropString) and (time() - lootedTargetsTime[unitName]) > timeBetweenLootBroadcast and GetNumRaidMembers() > 0  then
+            if unitName and not IsEmptyString(lootDropString) and (time() - lootedTargetsTime[unitName]) > timeBetweenLootBroadcast and IsInRaid()  then
                 lootedTargetsTime[unitName] = time()
                 SendChatMessage( lootDropString,"RAID")
             end

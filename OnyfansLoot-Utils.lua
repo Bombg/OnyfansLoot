@@ -165,3 +165,11 @@ function GetItemStringParts(ItemString)
     local itemId, enchantId, suffixId, uniqueId = string.match(ItemString, regex)
     return itemId, enchantId, suffixId, uniqueId
 end
+
+function IsInRaid()
+    local isInRaid = false
+    if GetNumRaidMembers() > 0 then
+        isInRaid = true
+    end
+    return isInRaid
+end
