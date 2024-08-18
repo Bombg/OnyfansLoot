@@ -29,16 +29,3 @@ OfLootMaster:SetScript("OnEvent", function ()
     end
 end)
 
-function GetItemLinkLootMsg(lootMsg)
-    local testSelf = "You receive loot: |cffffffff|Hitem:769:0:0:0|h[Chunk of Boar Meat]|h|r."
-	local testOther = "Luise receives loot: |cffffffff|Hitem:769:0:0:0|h[Chunk of Boar Meat]|h|r."
-    local regex = ""
-    print(string.match(testSelf,regex))
-    print(string.match(testOther,regex))
-end
-
-SLASH_TEST1 = "/test"
-SLASH_TEST2 = "/addontest1"
-SlashCmdList["TEST"] = function(msg)
-    GetItemLinkLootMsg("penis")
-end 
