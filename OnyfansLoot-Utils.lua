@@ -14,17 +14,8 @@ function ItemLinkToItemString(ItemLink)
     return il and ItemString or ItemLink
 end
 
-function DoesTableContain(table, contains)
-    local isContained = false
-    if table and contains and type(table) == 'table' then
-        for k, v in pairs(table) do
-            if k == contains then
-                isContained = true
-                break
-            end
-        end
-    end
-    return isContained
+function DoesTableContainKey(table, contains)
+    return table[contains] ~= nil
 end
 
 function GetNumEntries(table, contains)
@@ -172,4 +163,36 @@ function IsInRaid()
         isInRaid = true
     end
     return isInRaid
+end
+
+function HasThisLootDroppedThisRaid(raidKey,item,giver)
+    local hasDropped = false
+    local index = nil
+    if OfDrops and raidKey and DoesTableContainKey(OfDrops,raidKey) and item and giver then
+        for i, v in ipairs(OfDrops[raidKey]) do
+            for key, val in pairs(OfDrops[raidKey][i]) do
+                if string.lower(key) == string.lower(item) and string.lower(giver) == string.lower(val) then
+                    hasDropped = true
+                    index = i
+                end
+            end
+        end
+    end
+    return hasDropped, index
+end
+
+function IsMsgRaidItemTrade(msg)
+    local isRaidItemTrade = false
+    local regex ="(.-) trades item (.-) to (.*)."
+    if string.find(msg,regex) then
+        isRaidItemTrade = true
+    end
+    return isRaidItemTrade
+end
+
+function GetRaidKey()
+    local raidDate = date("%m-%d-%y")
+    local zoneName = GetRealZoneText()
+    local raidKey = raidDate .. " " .. zoneName
+    return raidKey
 end
