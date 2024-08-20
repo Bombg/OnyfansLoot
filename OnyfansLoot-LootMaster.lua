@@ -10,7 +10,7 @@ OfLootMaster:SetScript("OnEvent", function ()
     
     if event == "LOOT_OPENED" then
         local unitName = UnitName("target") or "container"
-        if unitName  and not DoesTableContain(lootedTargetsTime, unitName) then
+        if unitName  and not DoesTableContainKey(lootedTargetsTime, unitName) then
             lootedTargetsTime[unitName] = 0
         end
         if IsAllowedToAnnounceLoot() then
