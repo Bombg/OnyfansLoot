@@ -3,6 +3,7 @@ local minRarityForAnnouncement = 4
 local minRarityToGroupWith = 3
 local timeBetweenLootBroadcast = 180
 local lootedTargetsTime = {}
+local util = OnyFansLoot.util
 
 
 OfLootMaster:RegisterEvent("LOOT_OPENED")
@@ -10,10 +11,10 @@ OfLootMaster:SetScript("OnEvent", function ()
     
     if event == "LOOT_OPENED" then
         local unitName = UnitName("target") or "container"
-        if unitName  and not DoesTableContainKey(lootedTargetsTime, unitName) then
+        if unitName  and not util:DoesTableContainKey(lootedTargetsTime, unitName) then
             lootedTargetsTime[unitName] = 0
         end
-        if IsAllowedToAnnounceLoot() then
+        if util:IsAllowedToAnnounceLoot() then
             local lootDropString = ""
             local blueDropstring = ""
             local isEpic = false
@@ -27,7 +28,7 @@ OfLootMaster:SetScript("OnEvent", function ()
                 end
             end
             lootDropString = isEpic and lootDropString .. blueDropstring or lootDropString
-            if unitName and not IsEmptyString(lootDropString) and (time() - lootedTargetsTime[unitName]) > timeBetweenLootBroadcast and IsInRaid()  then
+            if unitName and not util:IsEmptyString(lootDropString) and (time() - lootedTargetsTime[unitName]) > timeBetweenLootBroadcast and util:IsInRaid()  then
                 lootedTargetsTime[unitName] = time()
                 SendChatMessage( lootDropString,"RAID")
             end

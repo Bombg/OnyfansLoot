@@ -1,6 +1,9 @@
+if OnyFansLoot.util then return end
 local minQualityToLogLoot = 3
+local util = {}
 
-function IsTableEmpty (table)
+
+util.IsTableEmpty = function (self,table)
     local isEmpty = true
     if type(table) == "table" then 
         for _, _ in pairs(table) do
@@ -10,17 +13,17 @@ function IsTableEmpty (table)
     return isEmpty
 end
 
-function ItemLinkToItemString(ItemLink)
+util.ItemLinkToItemString = function (self,ItemLink)
     if not ItemLink then return end
     local il, _, ItemString = strfind(ItemLink, "^|%x+|H(.+)|h%[.+%]")
     return il and ItemString or ItemLink
 end
 
-function DoesTableContainKey(table, contains)
+util.DoesTableContainKey = function (self,table, contains)
     return table[contains] ~= nil
 end
 
-function GetNumEntries(table, contains)
+util.GetNumEntries = function (self,table, contains)
     local numEntries = 0
     if not table then return end
     if not contains then return end
@@ -34,7 +37,7 @@ function GetNumEntries(table, contains)
     return numEntries
 end
 
-function NumTableEntries(table)
+util.NumTableEntries = function (self,table)
     local numEntries = 0
     if table and type(table) == "table" then 
         for k, v in pairs(table) do
@@ -45,7 +48,7 @@ function NumTableEntries(table)
 end
 
 --pfUI.api.strsplit
-function StrSplit(delimiter, subject)
+util.StrSplit = function (self,delimiter, subject)
     if not subject then return nil end
     local delimiter, fields = delimiter or ":", {}
     local pattern = string.format("([^%s]+)", delimiter)
@@ -53,37 +56,37 @@ function StrSplit(delimiter, subject)
     return unpack(fields)
 end
 
-function GetListVersion(table)
+util.GetListVersion  = function (self,table)
     local localListVersion = 0
-    if not IsTableEmpty(table) and  GetNumEntries(table, "version") ~= 0 then
+    if not self:IsTableEmpty(table) and  self:GetNumEntries(table, "version") ~= 0 then
         localListVersion = table["version"][1]
     end
     return localListVersion
 end
 
-function GetGuildRank(playerUnitId)
+util.GetGuildRank = function (self,playerUnitId)
     local guildName, guildRank, rankIndex  = GetGuildInfo(playerUnitId)
     return guildRank
 end
 
-function IsAllowedToHaveList() -- Tier 1's have lists so nevermind. Not quite as simple as making it rank limited. Maybe come back to this later. 1  = GM, 2 = Twitch Mod, 3 = Foot Model, 4 = Tier 2
+util.IsAllowedToHaveList = function (self) -- Tier 1's have lists so nevermind. Not quite as simple as making it rank limited. Maybe come back to this later. 1  = GM, 2 = Twitch Mod, 3 = Foot Model, 4 = Tier 2
     local allowed = false
     for i = 1,4 do
-        if GetGuildRank("player") == GuildControlGetRankName(i) then
+        if self:GetGuildRank("player") == GuildControlGetRankName(i) then
             allowed = true
             break
         end
     end
     return allowed
 end
-function GetLocalAddonVersion()
+util.GetLocalAddonVersion = function (self)
     --Update announcing code taken from pfUI
-    local major, minor, fix = StrSplit(".", tostring(GetAddOnMetadata("OnyFansLoot", "Version")))
+    local major, minor, fix = self:StrSplit(".", tostring(GetAddOnMetadata("OnyFansLoot", "Version")))
     local localVersion  = tonumber(major*10000 + minor*100 + fix)
     return localVersion
 end
 
-function IsRaidSetToMasterLoot()
+util.IsRaidSetToMasterLoot = function (self)
     local lootmethod, masterlooterPartyID, masterlooterRaidID = GetLootMethod() -- raidID doesn't work. PartyID = 0 if player is master, 1-4 if master in party. nil if not in party or not used
     local isMaster = false
     if lootmethod and lootmethod == "master" then
@@ -92,7 +95,7 @@ function IsRaidSetToMasterLoot()
     return isMaster
 end
 
-function IsPlayerMasterLooter()
+util.IsPlayerMasterLooter = function (self)
     local lootmethod, masterlooterPartyID, masterlooterRaidID = GetLootMethod() -- raidID doesn't work. PartyID = 0 if player is master, 1-4 if master in party. nil if not in party or not used
     local isMaster = false
     if masterlooterPartyID and masterlooterPartyID == 0 then
@@ -101,8 +104,8 @@ function IsPlayerMasterLooter()
     return isMaster
 end
 
-function IsAssistant()
-    local index = GetRaidIndex(OnyFansLoot.playerName)
+util.IsAssistant = function (self)
+    local index = self:GetRaidIndex(OnyFansLoot.playerName)
     local name, rank, subgroup, level, class, fileName, zone, online = GetRaidRosterInfo(index)
     local IsAssistant = false
     -- 2 = raid leader, 1 = assistant, 0 normal
@@ -112,7 +115,7 @@ function IsAssistant()
     return IsAssistant
 end
 
-function GetRaidIndex(unitName)
+util.GetRaidIndex = function (self,unitName)
     local raidIndex = 0
     if UnitInRaid("player") == 1 then
         for i = 1, GetNumRaidMembers() do
@@ -124,15 +127,15 @@ function GetRaidIndex(unitName)
     return raidIndex
 end
 
-function IsAllowedToAnnounceLoot()
+util.IsAllowedToAnnounceLoot = function (self)
     local isAllowed = false
-    if IsRaidSetToMasterLoot() and IsPlayerMasterLooter() then
+    if self:IsRaidSetToMasterLoot() and self:IsPlayerMasterLooter() then
         isAllowed = true
     end
     return isAllowed
 end
 
-function IsEmptyString(string)
+util.IsEmptyString = function (self,string)
     local isEmpty = false
     if string == nil or string == '' then
         isEmpty = true
@@ -140,26 +143,26 @@ function IsEmptyString(string)
     return isEmpty
 end
 
-function GetNameItemLinkFromLootMsg(lootMsg)
+util.GetNameItemLinkFromLootMsg = function (self,lootMsg)
     local regex = "(.-) receives? loot: (.-)%."
     local name, itemLink = string.match(lootMsg, regex)
     name = name ~= "You" and name or OnyFansLoot.playerName
     return name, itemLink
 end
 
-function GetItemLinkParts(itemLink)
+util.GetItemLinkParts = function (self,itemLink)
     local regex = "|cff(.-)|H(item:.-)|h%[(.-)%]|h|r"
     local hexColor, itemString, itemName = string.match(itemLink, regex)
     return hexColor, itemString, itemName
 end
 
-function GetItemStringParts(ItemString)
+util.GetItemStringParts = function (self,ItemString)
     local regex = "item:(%d+):(%d+):(%d+):(%d+)"
     local itemId, enchantId, suffixId, uniqueId = string.match(ItemString, regex)
     return itemId, enchantId, suffixId, uniqueId
 end
 
-function IsInRaid()
+util.IsInRaid = function (self)
     local isInRaid = false
     if GetNumRaidMembers() > 0 then
         isInRaid = true
@@ -167,10 +170,10 @@ function IsInRaid()
     return isInRaid
 end
 
-function HasThisLootDroppedThisRaid(raidKey,item,giver, table)
+util.HasThisLootDroppedThisRaid = function (self,raidKey,item,giver, table)
     local hasDropped = false
     local index = nil
-    if table and raidKey and DoesTableContainKey(table,raidKey) and item and giver then
+    if table and raidKey and self:DoesTableContainKey(table,raidKey) and item and giver then
         for i, v in ipairs(table[raidKey]) do
             for key, val in pairs(table[raidKey][i]) do
                 if string.lower(key) == string.lower(item) and string.lower(giver) == string.lower(val) then
@@ -183,7 +186,7 @@ function HasThisLootDroppedThisRaid(raidKey,item,giver, table)
     return hasDropped, index
 end
 
-function IsMsgRaidItemTrade(msg)
+util.IsMsgRaidItemTrade = function (self,msg)
     local isRaidItemTrade = false
     local regex ="(.-) trades item (.-) to (.*)."
     if string.find(msg,regex) then
@@ -192,24 +195,24 @@ function IsMsgRaidItemTrade(msg)
     return isRaidItemTrade
 end
 
-function GetRaidKey()
+util.GetRaidKey = function (self)
     local raidDate = date("%m-%d-%y")
     local zoneName = GetRealZoneText()
     local raidKey = raidDate .. " " .. zoneName
     return raidKey
 end
 
-function AddToListDrops(itemName, raidKey, itemToPersonTable)
-    if DoesTableContainKey(OfLoot, itemName) then
-        if not DoesTableContainKey(OfDrops, raidKey) then
+util.AddToListDrops = function (self,itemName, raidKey, itemToPersonTable)
+    if self:DoesTableContainKey(OfLoot, itemName) then
+        if not self:DoesTableContainKey(OfDrops, raidKey) then
             OfDrops[raidKey] = {}
         end
         table.insert(OfDrops[raidKey], itemToPersonTable)
     end
 end
 
-function AddToDrops(raidKey, itemToPersonTable, quality)
-    if not DoesTableContainKey(Drops, raidKey) then
+util.AddToDrops = function (self,raidKey, itemToPersonTable, quality)
+    if not self:DoesTableContainKey(Drops, raidKey) then
         Drops[raidKey] = {}
     end
     if quality >= minQualityToLogLoot then
@@ -217,3 +220,4 @@ function AddToDrops(raidKey, itemToPersonTable, quality)
     end
     
 end
+OnyFansLoot.util = util

@@ -1,5 +1,6 @@
 OnyFansLoot = AceLibrary("AceAddon-2.0"):new("AceHook-2.1")
 OnyFansLoot.playerName = UnitName("player")
+local util = OnyFansLoot.util
 
 
 local function SetItemRefHook(link,name,button)
@@ -20,8 +21,8 @@ end
 OnyFansLoot:SecureHook("SetItemRef",SetItemRefHook)
 
 function AddLootListToToolTip(Tooltip, itemName)
-    local numEntries = GetNumEntries(OfLoot,itemName)
-    local listVersion = GetListVersion(OfLoot)
+    local numEntries = OnyFansLoot.util:GetNumEntries(OfLoot,itemName)
+    local listVersion = OnyFansLoot.util:GetListVersion(OfLoot)
     if numEntries and itemName and numEntries > 0 and IsAltKeyDown() then
         CheckVersionAddLine(listVersion,Tooltip)
         for i = 1, numEntries,1 do
@@ -60,7 +61,7 @@ OnyfansGameTooltip:SetScript("OnShow", function (self)
 end)
 
 OnyFansLoot:SecureHook(GameTooltip, "SetLootItem", function(this, slot)
-        local itemLink = ItemLinkToItemString(GetLootSlotLink(slot))
+        local itemLink = OnyFansLoot.util:ItemLinkToItemString(GetLootSlotLink(slot))
         local itemName, itemstring, quality, level, class, subclass, max_stack, slot, texture = GetItemInfo(itemLink)
             if itemName then
                 AddLootListToToolTip(GameTooltip, string.lower(itemName))
