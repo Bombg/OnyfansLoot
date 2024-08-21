@@ -3,7 +3,7 @@
 ## Notes: An addons that shows whose up next for loot
 ## Author: Bombg
 ## Version: 0.2.6
-## SavedVariables: OfLoot, OfDrops
+## SavedVariables: OfLoot, OfDrops, Drops
 
 # main
 Libs\LibStub\LibStub.lua

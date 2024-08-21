@@ -12,15 +12,11 @@ OfLootDrops:SetScript("OnEvent", function ()
             local hexColor, itemString, itemName = GetItemLinkParts(itemLink)
             local itemId, enchantId, suffixId, uniqueId = GetItemStringParts(itemString)
             itemName = string.lower(itemName)
-            if DoesTableContainKey(OfLoot, itemName) then
-                local raidKey = GetRaidKey()
-                local itemToPersonTable  = {}
-                itemToPersonTable[itemName] = string.lower(playerName)
-                if not DoesTableContainKey(OfDrops, raidKey) then
-                    OfDrops[raidKey] = {}
-                end
-                table.insert(OfDrops[raidKey], itemToPersonTable)
-            end
+            local raidKey = GetRaidKey()
+            local itemToPersonTable  = {}
+            itemToPersonTable[itemName] = string.lower(playerName)
+            AddToListDrops(itemName, raidKey, itemToPersonTable)
+            AddToDrops(raidKey, itemToPersonTable)
         end
     end
     if event == "CHAT_MSG_SYSTEM" then

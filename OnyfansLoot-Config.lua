@@ -10,4 +10,5 @@ end)
 function InititalizeDefaultValues()
     if not OfLoot then OfLoot = {} end
     if not OfDrops then OfDrops = {} end
+    if not Drops then Drops = {} end
 end

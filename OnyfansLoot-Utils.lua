@@ -196,3 +196,19 @@ function GetRaidKey()
     local raidKey = raidDate .. " " .. zoneName
     return raidKey
 end
+
+function AddToListDrops(itemName, raidKey, itemToPersonTable)
+    if DoesTableContainKey(OfLoot, itemName) then
+        if not DoesTableContainKey(OfDrops, raidKey) then
+            OfDrops[raidKey] = {}
+        end
+        table.insert(OfDrops[raidKey], itemToPersonTable)
+    end
+end
+
+function AddToDrops(raidKey, itemToPersonTable)
+    if not DoesTableContainKey(Drops, raidKey) then
+        Drops[raidKey] = {}
+    end
+    table.insert(Drops[raidKey], itemToPersonTable)
+end
