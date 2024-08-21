@@ -67,7 +67,3 @@ OnyFansLoot:SecureHook(GameTooltip, "SetLootItem", function(this, slot)
                 AddLootListToToolTip(GameTooltip, string.lower(itemName))
             end
     end)
-
-
--- local itemName, itemstring, quality, level, class, subclass, max_stack, slot, texture = GetItemInfo(tLine)
--- local _, _, itemLink = string.find(GameTooltip.itemLink, "(item:%d+:%d+:%d+:%d+)")
