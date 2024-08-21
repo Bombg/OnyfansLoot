@@ -11,12 +11,15 @@ OfLootDrops:SetScript("OnEvent", function ()
             local playerName, itemLink = GetNameItemLinkFromLootMsg(chatMsg)
             local hexColor, itemString, itemName = GetItemLinkParts(itemLink)
             local itemId, enchantId, suffixId, uniqueId = GetItemStringParts(itemString)
-            itemName = string.lower(itemName)
-            local raidKey = GetRaidKey()
-            local itemToPersonTable  = {}
-            itemToPersonTable[itemName] = string.lower(playerName)
-            AddToListDrops(itemName, raidKey, itemToPersonTable)
-            AddToDrops(raidKey, itemToPersonTable)
+            local _, _, quality, level, class, subclass, max_stack, slot, texture = GetItemInfo(itemId)
+            if itemName and playerName then
+                itemName = string.lower(itemName)
+                local raidKey = GetRaidKey()
+                local itemToPersonTable  = {}
+                itemToPersonTable[itemName] = string.lower(playerName)
+                AddToListDrops(itemName, raidKey, itemToPersonTable)
+                AddToDrops(raidKey, itemToPersonTable, quality)
+            end
         end
     end
     if event == "CHAT_MSG_SYSTEM" then
@@ -25,12 +28,17 @@ OfLootDrops:SetScript("OnEvent", function ()
             local regex ="(.-) trades item (.-) to (.*)."
             local raidKey = GetRaidKey()
             local giver, item, receiver = string.match(message, regex)
-            giver = string.lower(giver)
-            item = string.lower(item)
-            receiver = string.lower(receiver)
-            local hasDropped, dropIndex = HasThisLootDroppedThisRaid(raidKey, item, giver)
-            if hasDropped then
-                OfDrops[raidKey][dropIndex][item] = receiver
+            if giver and item and receiver then
+                giver = string.lower(giver)
+                item = string.lower(item)
+                receiver = string.lower(receiver)
+                local hasListDropped, listDropIndex = HasThisLootDroppedThisRaid(raidKey, item, giver, OfDrops)
+                local hasDropsList, dropsListIndex = HasThisLootDroppedThisRaid(raidKey, item, giver, Drops)
+                if hasListDropped then
+                    OfDrops[raidKey][listDropIndex][item] = receiver
+                elseif hasDropsList then
+                    Drops[raidKey][dropsListIndex][item] = receiver
+                end
             end
         end
     end

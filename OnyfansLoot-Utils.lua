@@ -1,3 +1,5 @@
+local minQualityToLogLoot = 3
+
 function IsTableEmpty (table)
     local isEmpty = true
     if type(table) == "table" then 
@@ -165,12 +167,12 @@ function IsInRaid()
     return isInRaid
 end
 
-function HasThisLootDroppedThisRaid(raidKey,item,giver)
+function HasThisLootDroppedThisRaid(raidKey,item,giver, table)
     local hasDropped = false
     local index = nil
-    if OfDrops and raidKey and DoesTableContainKey(OfDrops,raidKey) and item and giver then
-        for i, v in ipairs(OfDrops[raidKey]) do
-            for key, val in pairs(OfDrops[raidKey][i]) do
+    if table and raidKey and DoesTableContainKey(table,raidKey) and item and giver then
+        for i, v in ipairs(table[raidKey]) do
+            for key, val in pairs(table[raidKey][i]) do
                 if string.lower(key) == string.lower(item) and string.lower(giver) == string.lower(val) then
                     hasDropped = true
                     index = i
@@ -206,9 +208,12 @@ function AddToListDrops(itemName, raidKey, itemToPersonTable)
     end
 end
 
-function AddToDrops(raidKey, itemToPersonTable)
+function AddToDrops(raidKey, itemToPersonTable, quality)
     if not DoesTableContainKey(Drops, raidKey) then
         Drops[raidKey] = {}
     end
-    table.insert(Drops[raidKey], itemToPersonTable)
+    if quality >= minQualityToLogLoot then
+        table.insert(Drops[raidKey], itemToPersonTable)
+    end
+    
 end
