@@ -70,6 +70,17 @@ OfSync:SetScript("OnEvent", function ()
                 DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000[OnyFansLoot]|r New version available! Check OnyFans Discord")
                 versionWarned = true
             end
+        elseif prefix and prefix == OnyFansLoot.itemDropPrefix and OnyFansLoot.lastLootmsg ~= message then
+            local _,playerName,itemId, raidKey = util:StrSplit(":",message)
+            if playerName and itemId and raidKey then
+                local itemName, _, quality, level, class, subclass, max_stack, slot, texture = GetItemInfo(itemId)
+                if itemName and quality then
+                    local itemToPersonTable  = {}
+                    itemToPersonTable[itemName] = string.lower(playerName)
+                    util:AddToListDrops(itemName, raidKey, itemToPersonTable)
+                    util:AddToDrops(raidKey, itemToPersonTable, quality)
+                end
+            end
         end
     end
 end)

@@ -1,5 +1,6 @@
 local OfLootDrops = CreateFrame("Frame")
 local util = OnyFansLoot.util
+OnyFansLoot.itemDropPrefix  = "ofitem"
 
 OfLootDrops:RegisterEvent("CHAT_MSG_LOOT")
 OfLootDrops:RegisterEvent("CHAT_MSG_SYSTEM")
@@ -19,7 +20,11 @@ OfLootDrops:SetScript("OnEvent", function ()
                 local itemToPersonTable  = {}
                 itemToPersonTable[itemName] = string.lower(playerName)
                 util:AddToListDrops(itemName, raidKey, itemToPersonTable)
-                AddToDrops(raidKey, itemToPersonTable, quality)
+                util:AddToDrops(raidKey, itemToPersonTable, quality)
+                if quality and quality >= OnyFansLoot.minQualityToLogLoot then
+                    OnyFansLoot.lastLootmsg =  "ITEM:" .. playerName .. ":" .. itemId .. ":" .. raidKey
+                    SendAddonMessage(OnyFansLoot.itemDropPrefix, OnyFansLoot.lastLootmsg, "GUILD")
+                end
             end
         end
     end

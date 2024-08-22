@@ -1,5 +1,5 @@
 if OnyFansLoot.util then return end
-local minQualityToLogLoot = 3
+OnyFansLoot.minQualityToLogLoot = 3
 local util = {}
 
 
@@ -215,7 +215,7 @@ util.AddToDrops = function (self,raidKey, itemToPersonTable, quality)
     if not self:DoesTableContainKey(Drops, raidKey) then
         Drops[raidKey] = {}
     end
-    if quality >= minQualityToLogLoot then
+    if quality >= OnyFansLoot.minQualityToLogLoot then
         table.insert(Drops[raidKey], itemToPersonTable)
     end
     
