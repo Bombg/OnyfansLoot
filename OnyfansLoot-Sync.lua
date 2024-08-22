@@ -72,7 +72,7 @@ OfSync:SetScript("OnEvent", function ()
             end
         elseif prefix and prefix == OnyFansLoot.itemDropPrefix and OnyFansLoot.lastLootmsg ~= message then
             local _,playerName,itemId, raidKey = util:StrSplit(":",message)
-            if playerName and itemId and raidKey then
+            if playerName and itemId and raidKey and raidKey == util:GetRaidKey() then
                 local itemName, _, quality, level, class, subclass, max_stack, slot, texture = GetItemInfo(itemId)
                 if itemName and quality then
                     local itemToPersonTable  = {}
