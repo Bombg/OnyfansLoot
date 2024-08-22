@@ -15,6 +15,7 @@ SlashCmdList["OF"] = function(msg)
         ShowUIPanel(ExportFrame, 1)
     elseif util:IsEmptyString(msg1) or msg1 == "help" then
         DEFAULT_CHAT_FRAME:AddMessage("OnyFansLoot usage:")
+        DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000help|r: brings up this text")
 		DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000/of|r or |r|cff9482c9/onyfansloot|r { help |  export }")
         DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000export|r: exports the latest raid loot into a window to be copy pasted")
         DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000export |r|cff9482c9n|r: where n is between 1 and 5, export one of the last five raids")
