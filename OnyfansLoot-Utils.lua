@@ -229,7 +229,6 @@ function util:GetLastNKeys(n, table)
                 nKeys[i] = nKeys[i-1]
             end
             nKeys[1] = k
-            print(k)
         end
     end
     return nKeys
@@ -281,8 +280,6 @@ function util:PairsByKeyDate (t)
 end
 
 function util.SortLootTableByDate(a, b)
-    print(a)
-    print(b)
     local regex ="(%d+)-(%d+)-(%d+)*-"
     local amonth, aday, ayear = string.match(a, regex)
     local bmonth, bday, byear = string.match(b, regex)
