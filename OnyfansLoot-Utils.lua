@@ -221,10 +221,10 @@ util.AddToDrops = function (self,raidKey, itemToPersonTable, quality)
     
 end
 
-function util:GetLastNKeys(n, table)
+function util:GetLastNKeys(n, nTable)
     local nKeys = {}
-    if type(table) == "table" then
-        for k, v in self:PairsByKeyDate(table) do  -- Need to redo this. Keys are in random order so I must sort them myself
+    if type(nTable) == "table" then
+        for k, v in self:PairsByKeyDate(nTable) do  
             for i=n ,2, -1 do
                 nKeys[i] = nKeys[i-1]
             end
@@ -279,6 +279,20 @@ function util:PairsByKeyDate (t)
     return iter
 end
 
+function util:PairsByKeyDateReverse (t)
+    local a = {}
+    for n in pairs(t) do table.insert(a, n) end
+    table.sort(a, util.SortLootTableByDateReverse)
+    local i = 0      -- iterator variable
+    local iter = function ()   -- iterator function
+        i = i + 1
+        if a[i] == nil then return nil
+        else return a[i], t[a[i]]
+        end
+    end
+    return iter
+end
+
 function util.SortLootTableByDate(a, b)
     local regex ="(%d+)-(%d+)-(%d+)*-"
     local amonth, aday, ayear = string.match(a, regex)
@@ -288,6 +302,26 @@ function util.SortLootTableByDate(a, b)
     adateNum = tonumber(adateNum)
     bdateNum = tonumber(bdateNum)
     return adateNum < bdateNum
+end
+function util.SortLootTableByDateReverse(a, b)
+    local regex ="(%d+)-(%d+)-(%d+)*-"
+    local amonth, aday, ayear = string.match(a, regex)
+    local bmonth, bday, byear = string.match(b, regex)
+    local adateNum = ayear .. amonth .. aday
+    local bdateNum = byear .. bmonth .. bday
+    adateNum = tonumber(adateNum)
+    bdateNum = tonumber(bdateNum)
+    return adateNum > bdateNum
+end
+
+function util:ExportDropTableKeys(dropTable)
+    local keyString = "Raid Dates: \n\n"
+    if type(dropTable) == "table" then
+        for k, v in self:PairsByKeyDateReverse(dropTable) do 
+            keyString = keyString .. k .. "\n"
+        end
+    end
+    return keyString
 end
 
 OnyFansLoot.util = util
