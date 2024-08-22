@@ -20,3 +20,5 @@ OnyfansLoot-Utils.lua
 OnyfansLoot-Sync.lua
 OnyfansLoot-LootMaster.lua
 OnyfansLoot-Drops.lua
+OnyfansLoot-UI.xml
+OnyfansLoot-Commands.lua

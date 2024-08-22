@@ -220,4 +220,77 @@ util.AddToDrops = function (self,raidKey, itemToPersonTable, quality)
     end
     
 end
+
+function util:GetLastNKeys(n, table)
+    local nKeys = {}
+    if type(table) == "table" then
+        for k, v in self:PairsByKeyDate(table) do  -- Need to redo this. Keys are in random order so I must sort them myself
+            for i=n ,2, -1 do
+                nKeys[i] = nKeys[i-1]
+            end
+            nKeys[1] = k
+            print(k)
+        end
+    end
+    return nKeys
+end
+
+function util:ExportLootTablesAsString(key)
+    local string = key .. "\n\n"
+    if self:DoesTableContainKey(OfDrops, key) then
+        string = string .. "List Drops:\n\n"
+
+        for i, v in ipairs(OfDrops[key]) do
+            for k, val in pairs(v) do
+                string = string .. self:TitleCase(k) .. " - " .. self:TitleCase(val) .. "\n"
+            end
+        end
+    end
+    string = string .. "\n\n"
+    if self:DoesTableContainKey(Drops, key) then
+        string = string .. "All Drops:\n\n"
+        for i, v in ipairs(Drops[key]) do
+            for k, val in pairs(v) do
+                string = string .. self:TitleCase(k) .. " - " .. self:TitleCase(val) .. "\n"
+            end
+        end 
+    end
+    return string
+end
+
+function util:TitleCase(str)
+    return string.gsub(str, "(%a)([%w_']*)", util.TitleCaseHelper)
+end
+
+function util.TitleCaseHelper(first, rest )
+    return string.upper(first)..string.lower(rest)
+end
+
+function util:PairsByKeyDate (t)
+    local a = {}
+    for n in pairs(t) do table.insert(a, n) end
+    table.sort(a, util.SortLootTableByDate)
+    local i = 0      -- iterator variable
+    local iter = function ()   -- iterator function
+        i = i + 1
+        if a[i] == nil then return nil
+        else return a[i], t[a[i]]
+        end
+    end
+    return iter
+end
+
+function util.SortLootTableByDate(a, b)
+    print(a)
+    print(b)
+    local regex ="(%d+)-(%d+)-(%d+)*-"
+    local amonth, aday, ayear = string.match(a, regex)
+    local bmonth, bday, byear = string.match(b, regex)
+    local adateNum = ayear .. amonth .. aday
+    local bdateNum = byear .. bmonth .. bday
+    adateNum = tonumber(adateNum)
+    bdateNum = tonumber(bdateNum)
+    return adateNum < bdateNum
+end
+
 OnyFansLoot.util = util
