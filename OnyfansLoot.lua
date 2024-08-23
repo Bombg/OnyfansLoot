@@ -21,13 +21,12 @@ end
 OnyFansLoot:SecureHook("SetItemRef",SetItemRefHook)
 
 function AddLootListToToolTip(Tooltip, itemName)
-    local numEntries = OnyFansLoot.util:GetNumEntries(OfLoot,itemName)
-    local listVersion = OnyFansLoot.util:GetListVersion(OfLoot)
-    if numEntries and itemName and numEntries > 0 and IsAltKeyDown() then
+    local lootTable = OnyFansLoot.isStaged and StagedOfLoot or OfLoot
+    local listVersion = OnyFansLoot.util:GetListVersion(lootTable)
+    if OnyFansLoot.util:DoesTableContainKey(lootTable, string.lower(itemName)) and itemName  and IsAltKeyDown() then
         CheckVersionAddLine(listVersion,Tooltip)
-        for i = 1, numEntries,1 do
-            Tooltip:AddLine(i .. ":" .. OfLoot[itemName][i],1,0,0)
-        end
+        local list = OnyFansLoot.util:CreateItemList(lootTable, string.lower(itemName)) 
+        Tooltip:AddLine(OnyFansLoot.util:TitleCase(list),1,0,0)
         Tooltip:Show()
     elseif itemName == "broken boar tusk" and IsAltKeyDown() then
         Tooltip:AddLine("1: Goblin Loot" ,1,0,0)
@@ -40,8 +39,11 @@ function AddLootListToToolTip(Tooltip, itemName)
 end
 
 function CheckVersionAddLine(listVersion, Tooltip)
+    if OnyFansLoot.isStaged then
+        Tooltip:AddLine("Staged: Uncommited changes",1,0,0)
+    end
     if listVersion > 0 then
-        Tooltip:AddLine("List#" ..listVersion ..":" .. OfLoot["version"][2],1,0,0)
+        Tooltip:AddLine("List#" ..listVersion ..":" .. OfLoot["version"][2],1,0,0) 
     else
         Tooltip:AddLine("No List Installed",1,0,0)
     end

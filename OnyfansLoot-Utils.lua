@@ -324,4 +324,228 @@ function util:ExportDropTableKeys(dropTable)
     return keyString
 end
 
+-- Taken from https://github.com/laytya/WowLuaVanilla which took it from SuperMacro
+function util:OnVerticalScroll(scrollFrame)
+	local offset = scrollFrame:GetVerticalScroll();
+	local scrollbar = getglobal(scrollFrame:GetName().."ScrollBar");
+
+	scrollbar:SetValue(offset);
+	local min, max = scrollbar:GetMinMaxValues();
+	local display = false;
+	if ( offset == 0 ) then
+        getglobal(scrollbar:GetName().."ScrollUpButton"):Disable();
+	else
+        getglobal(scrollbar:GetName().."ScrollUpButton"):Enable();
+        display = true;
+	end
+	if ((scrollbar:GetValue() - max) == 0) then
+        getglobal(scrollbar:GetName().."ScrollDownButton"):Disable();
+	else
+        getglobal(scrollbar:GetName().."ScrollDownButton"):Enable();
+        display = true;
+	end
+	if ( display ) then
+		scrollbar:Show();
+	else
+		scrollbar:Hide();
+	end
+end
+
+function util:ParseCsv(text, parent)
+    local csvTable = {}
+    for line in string.gfind(text, '([^\n]+)') do
+        table.insert(csvTable, util:lineFromCSV(line))
+    end
+    ImportedTable = csvTable
+    parent:Hide()
+    self:CleanImportedTable()
+    self:ValidateImportedTable()
+end
+
+function util:CleanImportedTable()
+    local lootStartsAt = 7
+    local notHeader = 2
+    for i = notHeader, table.getn(ImportedTable) do
+        for j = lootStartsAt, table.getn(ImportedTable[i]) do
+            ImportedTable[i][j] = string.trim(ImportedTable[i][j])
+            ImportedTable[i][j] = string.gsub(ImportedTable[i][j],"%[","")
+            ImportedTable[i][j] = string.gsub(ImportedTable[i][j],"%]","")
+        end
+        if ImportedTable[i][lootStartsAt] == ImportedTable[i][lootStartsAt + 2] then
+            ImportedTable[i][lootStartsAt + 2] = ""
+        end
+    end
+end
+
+function util:ValidateImportedTable()
+    local lootStartsAt = 7
+    local listsStartAt = 2
+    local invalidItems = "These items are spelled incorrectly or are not on active raids loot list\nInvalid Item Names:\n\n"
+    local invalidItemsDummy = "These items are spelled incorrectly or are not on active raids loot list\nInvalid Item Names:\n\n"
+    for i = listsStartAt, table.getn(ImportedTable) do
+        for j = lootStartsAt, table.getn(ImportedTable[i]) do
+            if not self:IsEmptyString(ImportedTable[i][j]) and not self:IsValidItemName(string.lower(ImportedTable[i][j])) then
+                invalidItems = invalidItems .. ImportedTable[i][1] .. ": " .. ImportedTable[i][j] .. "\n"
+                ImportedTable[i][j] = ""
+            end
+        end
+    end
+    if invalidItems ~= invalidItemsDummy then
+        invalidItems = invalidItems .. "\n\n These items are deleted from the list. If you want them to stay fix their spellings in the source list and reimport\n" .. 
+                                        "Once you are satisfied, stage the list with the /of stage command"
+        self:ShowExportFrame(invalidItems)
+    else
+        DEFAULT_CHAT_FRAME:AddMessage("No invalid names found")
+    end
+    
+end
+
+-- From https://github.com/trumpetx/ChatLootBidder
+-- Convert from CSV string to table (converts a single line of a CSV file)
+function util:lineFromCSV(s)
+    s = s .. ','        -- ending comma
+    local t = {}        -- table to collect fields
+    local fieldstart = 1
+    repeat
+    -- next field is quoted? (start with `"'?)
+    if string.find(s, '^"', fieldstart) then
+        local a, c
+        local i  = fieldstart
+        repeat
+        -- find closing quote
+        a, i, c = string.find(s, '"("?)', i+1)
+        until c ~= '"'    -- quote not followed by quote?
+        if not i then error('unmatched "') end
+        local f = string.sub(s, fieldstart+1, i-1)
+        table.insert(t, (string.gsub(f, '""', '"')))
+        fieldstart = string.find(s, ',', i) + 1
+    else                -- unquoted; find next comma
+        local nexti = string.find(s, ',', fieldstart)
+        table.insert(t, string.sub(s, fieldstart, nexti-1))
+        fieldstart = nexti + 1
+    end
+    until fieldstart > string.len(s)
+    return t
+end
+
+function Dump(o)
+    if type(o) == 'table' then
+        local s = '{ '
+        for k,v in pairs(o) do
+            if type(k) ~= 'number' then k = '"'..k..'"' end
+            s = s .. '['..k..'] = ' .. Dump(v) .. ','
+        end
+        return s .. '} '
+    else
+        return tostring(o)
+    end
+end
+-- From https://github.com/trumpetx/ChatLootBidder
+function util:AtlasLootLoaded()
+    return (AtlasLoot_Data and AtlasLoot_Data["AtlasLootItems"]) ~= nil
+end
+function util:IsPartOfRaidLootTable(raidBossKey)
+    local isValid = false
+    local raidRegex = {'^MC','^BWL', '^AQ40', '^ES'} --  add '^NAX' at a later date
+    for i, v in ipairs(raidRegex) do
+        if string.find(raidBossKey, v) then
+            isValid = true
+            break
+        end
+    end
+    return isValid
+end
+
+function util:IsValidItemName(inputName)
+    -- MC, BWL, AQ40, ES, NAX
+    local lootQueryIndex = 3
+    local isValid = false
+    if  self:AtlasLootLoaded() then
+        for raidBossKey,raidBoss in AtlasLoot_Data["AtlasLootItems"] do
+            if self:IsPartOfRaidLootTable(raidBossKey) then
+                for i, v in ipairs(raidBoss) do
+                    local quality, itemName = string.match(v[lootQueryIndex], '^=q(%d)=(.-)$')
+                    if itemName and string.lower(itemName) == string.lower(inputName) then
+                        isValid = true
+                        break
+                    end
+                end
+            end
+        end
+    else
+        DEFAULT_CHAT_FRAME:AddMessage("Cannot validate list without |cffFF0000AtlasLoot|r installed.")
+    end
+    return isValid
+end
+
+function util:ShowExportFrame(exportText)
+    ExportFrameEditBox1:SetFont("Fonts\\FRIZQT__.TTF", "12")
+    ExportFrameEditBox1Left:Hide()
+    ExportFrameEditBox1Middle:Hide()
+    ExportFrameEditBox1Right:Hide()
+    ExportFrameEditBox1:SetText(exportText)
+    ShowUIPanel(ExportFrame, 1)
+end
+
+function util:StageImportedList()
+    OnyFansLoot.isStaged = true
+    StagedOfLoot = {}
+    local nameLoc = 1
+    local lootStartsAt = 7
+    local notHeader = 2
+    local version = self:GetListVersion(OfLoot)
+    StagedOfLoot["version"] = {}
+    StagedOfLoot["version"][1] = version + 1
+    StagedOfLoot["version"][2] = date("%m-%d-%y")
+    for i = notHeader, table.getn(ImportedTable) do
+        for j = lootStartsAt, table.getn(ImportedTable[i]) do
+            if not self:IsEmptyString(ImportedTable[i][j]) then
+                local itemName = string.lower(ImportedTable[i][j])
+                if self:IsTableEmpty(StagedOfLoot[itemName]) then
+                    StagedOfLoot[itemName] = {}
+                end
+                local modifier = self:GetLootModifier(i,j)
+                StagedOfLoot[itemName][ImportedTable[i][nameLoc]] = modifier
+            end
+        end
+    end
+end
+
+function util:GetLootModifier(i,j)
+    local AttendanceModifierLoc = 5
+    local lootStartsAt = 7
+    local modifier = 0
+    if not self:IsEmptyString(ImportedTable[i][AttendanceModifierLoc]) then
+        if j == lootStartsAt then
+            modifier = tonumber(ImportedTable[i][AttendanceModifierLoc]) + 1
+        else
+            modifier = tonumber(ImportedTable[i][AttendanceModifierLoc])
+        end
+    end
+    modifier = modifier + j  - lootStartsAt
+    return modifier
+end
+
+function util:CreateItemList(lootTable, itemName)
+    local lowerName = string.lower(itemName)
+    local list = ""
+    local listArr = {}
+    local j = 1
+    for k, v in pairs(lootTable[lowerName]) do
+        if k ~= "version" and util:DoesTableContainKey(listArr, v + 1) then
+            listArr[v + 1] = listArr[v + 1] .. k ..  ", "
+        else
+            listArr[v + 1] = k .. ", "
+        end
+    end
+
+    for i = 1, 20 do
+        if not util:IsEmptyString(listArr[i]) then
+            list = list .. tostring(j) .. ": " .. listArr[i] .. "\n"
+            j = j + 1
+        end
+    end
+    return list
+end
+
 OnyFansLoot.util = util
