@@ -68,21 +68,3 @@ function GetExportData(msg2)
     end 
     return data
 end
-
-
-SLASH_TEST1 = "/test"
-SlashCmdList["TEST"] = function(msg)
-    -- local instructions = "************DELETE ALL THIS TEXT BEFORE PASTING IN YOUR CSV************\n\n" ..
-    --                     "******************INSTRUCTIONS******************\n" ..
-    --                     "DELETE ALL ITEMS WITH STRIKETHROUGH IN SOURCE LIST\n".. 
-    --                     "STRIKETHROUGH IS NOT IMPORTED INTO CSV SO ANY IMPORT CANNOT TELL THE DIFFERENCE\n" ..
-    --                     "IF A LIST ITEM IS MISSPELLED IT WILL NOT WORK\n\n"..
-    --                     "THE LIST WILL BE CROSSED CHECKED WITH ATLASLOOT FOR MISSPELLINGS" .. 
-    --                     "************DELETE ALL THIS TEXT BEFORE PASTING IN YOUR CSV************\n\n"
-    -- ImportFrameHeaderString:SetText("CSV Import")
-    -- ImportFrameText:SetText(instructions)
-    -- ShowUIPanel(ImportFrame, 1)
-    -- util:StageImportedList()
-    local list = OnyFansLoot.util:CreateItemList(StagedOfLoot, "scarab brooch")
-    print(list)
-end 
