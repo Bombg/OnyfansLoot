@@ -16,9 +16,9 @@ SlashCmdList["OF"] = function(msg)
         DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000export |r|cff9482c9n|r: where n is between 1 and 5, export one of the last five raids")
         DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000export |r|cff9482c9help|r: bring up a list of raid {key}s")
         DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000export |r|cff9482c9key|r: bring up drops for a specific raid key. Where key is one of the keys got from export help")
-        DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000import |r|cff9482c9key|r: brings up a window to import from csv")
-        DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000stage |r|cff9482c9key|r: stages csv import so you can test it on tooltips before sharing it")
-        DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000commit |r|cff9482c9key|r: commit staged changes so its shared with everyone. Assuming higher list version")
+        DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000import |r: brings up a window to import from csv")
+        DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000stage |r: stages csv import so you can test it on tooltips before sharing it")
+        DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000commit |r: commit staged changes so its shared with everyone. Assuming higher list version")
     elseif msg1 and msg1 == "import" then
         local instructions = "************DELETE ALL THIS TEXT BEFORE PASTING IN YOUR CSV************\n\n" ..
                         "******************INSTRUCTIONS******************\n" ..
