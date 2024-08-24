@@ -2,7 +2,6 @@ if OnyFansLoot.util then return end
 OnyFansLoot.minQualityToLogLoot = 3
 local util = {}
 
-
 util.IsTableEmpty = function (self,table)
     local isEmpty = true
     if type(table) == "table" then 
@@ -234,27 +233,44 @@ function util:GetLastNKeys(n, nTable)
     return nKeys
 end
 
+function util:IsItemBlackListed(itemName)
+    local itemBlackList = {
+        "idol of the sun","idol of war","blue qiraji resonating crystal","idol of life","idol of death","idol of rebirth",
+        "idol of strife","green qiraji resonating crystal","idol of night","large brilliant shard","idol of the sage", "yellow qiraji resonating crystal"
+    }
+    local isBlacklisted = false
+    for i, v in ipairs(itemBlackList) do
+        if string.lower(itemName) == string.lower(v) then
+            isBlacklisted = true
+            break
+        end
+    end
+    return isBlacklisted
+end
+
 function util:ExportLootTablesAsString(key)
-    local string = key .. "\n\n"
+    local exportString = key .. "\n\n"
     if self:DoesTableContainKey(OfDrops, key) then
-        string = string .. "List Drops:\n\n"
+        exportString = exportString .. "List Drops:\n\n"
 
         for i, v in ipairs(OfDrops[key]) do
             for k, val in pairs(v) do
-                string = string .. self:TitleCase(k) .. " - " .. self:TitleCase(val) .. "\n"
+                exportString = exportString .. self:TitleCase(k) .. " - " .. self:TitleCase(val) .. "\n"
             end
         end
     end
-    string = string .. "\n\n"
+    exportString = exportString .. "\n\n"
     if self:DoesTableContainKey(Drops, key) then
-        string = string .. "All Drops:\n\n"
+        exportString = exportString .. "All Drops:\n\n"
         for i, v in ipairs(Drops[key]) do
             for k, val in pairs(v) do
-                string = string .. self:TitleCase(k) .. " - " .. self:TitleCase(val) .. "\n"
+                if not self:IsItemBlackListed(string.lower(k)) then
+                    exportString = exportString .. self:TitleCase(k) .. " - " .. self:TitleCase(val) .. "\n"
+                end
             end
         end 
     end
-    return string
+    return exportString
 end
 
 function util:TitleCase(str)
