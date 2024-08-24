@@ -69,3 +69,15 @@ OnyFansLoot:SecureHook(GameTooltip, "SetLootItem", function(this, slot)
                 AddLootListToToolTip(GameTooltip, string.lower(itemName))
             end
     end)
+
+AtlasLootHooktip = CreateFrame("Frame", "AtlasLootHookTooltip",AtlasLootTooltip)
+AtlasLootHooktip:SetScript("OnShow", function(self)
+    if AtlasLootTooltip then
+        local itemName = getglobal("AtlasLootTooltipTextLeft".."1"):GetText()
+        if itemName then
+            itemName = string.lower(itemName)
+            AddLootListToToolTip(AtlasLootTooltip,itemName)
+        end
+    end
+end)
+--AtlasLootItem_OnEnter()
