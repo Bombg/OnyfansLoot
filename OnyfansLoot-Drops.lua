@@ -13,8 +13,8 @@ OfLootDrops:SetScript("OnEvent", function ()
             local playerName, itemLink = util:GetNameItemLinkFromLootMsg(chatMsg)
             local hexColor, itemString, itemName = util:GetItemLinkParts(itemLink)
             local itemId, enchantId, suffixId, uniqueId = util:GetItemStringParts(itemString)
-            local _, _, quality, level, class, subclass, max_stack, slot, texture = GetItemInfo(itemId)
-            if itemName and playerName then
+            if itemName and playerName and itemId then
+                local _, _, quality, level, class, subclass, max_stack, slot, texture = GetItemInfo(itemId)
                 itemName = string.lower(itemName)
                 local raidKey = util:GetRaidKey()
                 local itemToPersonTable  = {}

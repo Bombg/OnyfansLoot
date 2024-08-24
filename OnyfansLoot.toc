@@ -2,13 +2,16 @@
 ## Title: Onyfans Loot
 ## Notes: An addons that shows whose up next for loot
 ## Author: Bombg
-## Version: 0.3.0
+## Version: 0.3.1
 ## SavedVariables: OfLoot, OfDrops, Drops, ImportedTable, StagedOfLoot
 
 # main
+Compatability.lua
 Libs\LibStub\LibStub.lua
 Libs\AceLibrary\AceLibrary.lua
 Libs\AceOO-2.0\AceOO-2.0.lua
+Libs\AceEvent-2.0\AceEvent-2.0.lua
+Libs\AceAddon-2.0\AceAddon-2.0.lua
 Libs\AceHook-2.1\AceHook-2.1.lua
 Libs\AceSerializer-3.0\AceSerializer-3.0.lua
 Libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
