@@ -80,4 +80,3 @@ AtlasLootHooktip:SetScript("OnShow", function(self)
         end
     end
 end)
---AtlasLootItem_OnEnter()
