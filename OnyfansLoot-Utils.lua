@@ -398,15 +398,19 @@ function util:CleanImportedTable()
     end
 end
 
-function util:ValidateImportedTable()
+function util:ValidateImportedTable() --TODO: REFACTOR
     local lootStartsAt = 7
     local listsStartAt = 2
+    local lootLiveDateInd = 3
+    local oneTwoLiveDateInd = 4
     local invalidItems = "These items are spelled incorrectly or are not on active raids loot list\nInvalid Item Names:\n\n"
     local invalidItemsDummy = "These items are spelled incorrectly or are not on active raids loot list\nInvalid Item Names:\n\n"
     local invalidNames = "Mispselled player names, or not on guild roster: \n\n"
     local invalidNamesDummy = "Mispselled player names, or not on guild roster: \n\n"
     for i = listsStartAt, table.getn(ImportedTable) do
         local playerName = string.lower(ImportedTable[i][1])
+        local lootLiveDate = ImportedTable[i][lootLiveDateInd]
+        local oneTwoLiveDate = ImportedTable[i][oneTwoLiveDateInd]
         if not self:IsValidPlayerName(playerName) then
             invalidNames = invalidNames .. playerName .. "\n"
         end
@@ -544,8 +548,10 @@ function util:StageImportedList()
                     StagedOfLoot[itemName] = {}
                 end
                 local modifier = self:GetLootModifier(i,j)
-                local playerName = string.lower(ImportedTable[i][nameLoc])
-                StagedOfLoot[itemName][playerName] = modifier
+                if modifier then
+                    local playerName = string.lower(ImportedTable[i][nameLoc])
+                    StagedOfLoot[itemName][playerName] = modifier
+                end
             end
         end
     end
@@ -554,16 +560,55 @@ end
 function util:GetLootModifier(i,j)
     local AttendanceModifierLoc = 5
     local lootStartsAt = 7
-    local modifier = 0
-    if not self:IsEmptyString(ImportedTable[i][AttendanceModifierLoc]) then
+    local lootLivePos = 3
+    local oneTwoLivePos = 4
+    local modifier = nil
+    if not self:IsEmptyString(ImportedTable[i][AttendanceModifierLoc])  then
+        modifier = 0
         if j == lootStartsAt then
             modifier = tonumber(ImportedTable[i][AttendanceModifierLoc]) + 1
         else
             modifier = tonumber(ImportedTable[i][AttendanceModifierLoc])
         end
+        modifier = modifier + j  - lootStartsAt
+    else
+        modifier = j  - lootStartsAt
     end
-    modifier = modifier + j  - lootStartsAt
+    if j >= lootStartsAt and j <= lootStartsAt + 3 and not util:IsInputDatePassed(ImportedTable[i][oneTwoLivePos]) or not util:IsInputDatePassed(ImportedTable[i][lootLivePos]) then
+        modifier = nil
+    end
+    print(ImportedTable[i][1] .. ": " .. tostring(modifier))
     return modifier
+end
+
+function util:IsInputDatePassed(inputDate) 
+    local isPassed = true
+    local maximumDifference = 800
+    if self:IsValidInputDate(inputDate) then
+        local inMonth, inDay = util:StrSplit("/", inputDate)
+        if string.len(inDay) == 1 then
+            inDay = "0" .. inDay
+        end
+        local inNumber = tonumber(inMonth .. inDay)
+        local month = date("%m")
+        local day = date("%d")
+        local dNumber = tonumber(month .. day)
+        if dNumber < inNumber or dNumber - inNumber > maximumDifference then -- taking into account when month is currently 12 but next month is 1. Dates still need to be cleared up in list once passed to avoid long term issues
+            isPassed = false
+        end
+    end
+    return isPassed
+end
+
+function util:IsValidInputDate(inputDate) -- mm/dd mm/d m/dd m/d
+    local inMonth, inDay = util:StrSplit("/", inputDate)
+    local isValid = false
+    if inMonth and inDay then
+        if tonumber(inMonth) < 13 and tonumber(inMonth) > 0 and tonumber(inDay) < 32 and tonumber(inDay) > 0 then
+            isValid = true
+        end
+    end
+    return isValid
 end
 
 function util:CreateItemList(lootTable, itemName)
