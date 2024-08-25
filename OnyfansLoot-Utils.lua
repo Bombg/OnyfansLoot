@@ -577,7 +577,6 @@ function util:GetLootModifier(i,j)
     if j >= lootStartsAt and j <= lootStartsAt + 3 and not util:IsInputDatePassed(ImportedTable[i][oneTwoLivePos]) or not util:IsInputDatePassed(ImportedTable[i][lootLivePos]) then
         modifier = nil
     end
-    print(ImportedTable[i][1] .. ": " .. tostring(modifier))
     return modifier
 end
 
