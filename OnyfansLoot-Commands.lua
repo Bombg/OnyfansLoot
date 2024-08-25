@@ -34,7 +34,7 @@ SlashCmdList["OF"] = function(msg)
         if not util:IsTableEmpty(ImportedTable) then
             util:StageImportedList()
             DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: Imported List Has Been Staged")
-            DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: Commit changes for them to take affect and be shared with others")
+            DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: Commit changes for them to take effect and be shared with others")
             DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: Current Tooltips reflect staged list only")
         else
             DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: There is no imported list to stage")

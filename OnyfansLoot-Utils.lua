@@ -202,11 +202,15 @@ util.GetRaidKey = function (self)
 end
 
 util.AddToListDrops = function (self,itemName, raidKey, itemToPersonTable)
-    if self:DoesTableContainKey(OfLoot, itemName) then
-        if not self:DoesTableContainKey(OfDrops, raidKey) then
-            OfDrops[raidKey] = {}
+    if itemName and itemToPersonTable and self:DoesTableContainKey(OfLoot, itemName) then
+        local playerName = itemToPersonTable[itemName]
+        playerName = string.lower(playerName)
+        if self:DoesTableContainKey(OfLoot[itemName], playerName) then
+            if not self:DoesTableContainKey(OfDrops, raidKey) then
+                OfDrops[raidKey] = {}
+            end
+            table.insert(OfDrops[raidKey], itemToPersonTable)
         end
-        table.insert(OfDrops[raidKey], itemToPersonTable)
     end
 end
 
@@ -399,7 +403,13 @@ function util:ValidateImportedTable()
     local listsStartAt = 2
     local invalidItems = "These items are spelled incorrectly or are not on active raids loot list\nInvalid Item Names:\n\n"
     local invalidItemsDummy = "These items are spelled incorrectly or are not on active raids loot list\nInvalid Item Names:\n\n"
+    local invalidNames = "Mispselled player names, or not on guild roster: \n\n"
+    local invalidNamesDummy = "Mispselled player names, or not on guild roster: \n\n"
     for i = listsStartAt, table.getn(ImportedTable) do
+        local playerName = string.lower(ImportedTable[i][1])
+        if not self:IsValidPlayerName(playerName) then
+            invalidNames = invalidNames .. playerName .. "\n"
+        end
         for j = lootStartsAt, table.getn(ImportedTable[i]) do
             if not self:IsEmptyString(ImportedTable[i][j]) and not self:IsValidItemName(string.lower(ImportedTable[i][j])) then
                 invalidItems = invalidItems .. ImportedTable[i][1] .. ": " .. ImportedTable[i][j] .. "\n"
@@ -407,10 +417,22 @@ function util:ValidateImportedTable()
             end
         end
     end
-    if invalidItems ~= invalidItemsDummy then
-        invalidItems = invalidItems .. "\n\n These items are deleted from the list. If you want them to stay fix their spellings in the source list and reimport\n" .. 
-                                        "Once you are satisfied, stage the list with the /of stage command"
-        self:ShowExportFrame(invalidItems)
+    if invalidItems ~= invalidItemsDummy or invalidNames ~= invalidNamesDummy then
+        local finalText 
+        if invalidItems ~= invalidItemsDummy then
+            invalidItems = invalidItems .. "\n\n These items are deleted from the list. If you want them to stay fix their spellings in the source list and reimport\n" .. 
+                                        "Once you are satisfied, stage the list with the /of stage command\n\n"
+            finalText = invalidItems
+        end
+        if invalidNames ~= invalidNamesDummy then
+            invalidNames = invalidNames .. "\n\n Please fix player name mispellings in source list and reimport"
+            if finalText then
+                finalText = finalText .. invalidNames
+            else
+                finalText = invalidNames
+            end
+        end
+        self:ShowExportFrame(finalText)
     else
         DEFAULT_CHAT_FRAME:AddMessage("No invalid names found")
     end
@@ -522,7 +544,8 @@ function util:StageImportedList()
                     StagedOfLoot[itemName] = {}
                 end
                 local modifier = self:GetLootModifier(i,j)
-                StagedOfLoot[itemName][ImportedTable[i][nameLoc]] = modifier
+                local playerName = string.lower(ImportedTable[i][nameLoc])
+                StagedOfLoot[itemName][playerName] = modifier
             end
         end
     end
@@ -563,6 +586,39 @@ function util:CreateItemList(lootTable, itemName)
         end
     end
     return list
+end
+
+function util:IsValidPlayerName(playerName)
+    local isValid = false
+    if not playerName then return end
+    if not OnyFansLoot.guildRoster then
+        self:PopulateGuildRoster()
+    end
+    for i, v in ipairs(OnyFansLoot.guildRoster) do
+        if string.lower(playerName) == string.lower(v) then
+            isValid = true
+            break
+        end
+    end
+    return isValid
+end
+
+function util:PopulateGuildRoster()
+    local turnOff = false
+    if not OnyFansLoot.guildRoster then
+        OnyFansLoot.guildRoster = {}
+    end
+    if not GetGuildRosterShowOffline() then
+        SetGuildRosterShowOffline(true)
+        turnOff = true
+    end
+    for i = 1, GetNumGuildMembers() do
+        local name, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName = GetGuildRosterInfo(i)
+        table.insert(OnyFansLoot.guildRoster, string.lower(name))
+    end
+    if turnOff then
+        SetGuildRosterShowOffline(false)
+    end
 end
 
 OnyFansLoot.util = util
