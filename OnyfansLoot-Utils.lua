@@ -462,7 +462,7 @@ function util:ValidateImportedTable()
     if finalText ~= " " then
         self:ShowExportFrame(finalText)
     else
-        DEFAULT_CHAT_FRAME:AddMessage("No invalid names found in import. Congrats!")
+        DEFAULT_CHAT_FRAME:AddMessage("No invalid items,names, or dates found in import. Congrats!")
     end
 end
 
