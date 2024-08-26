@@ -18,12 +18,14 @@ OfLootDrops:SetScript("OnEvent", function ()
                 itemName = string.lower(itemName)
                 local raidKey = util:GetRaidKey()
                 local itemToPersonTable  = {}
-                itemToPersonTable[itemName] = string.lower(playerName)
-                util:AddToListDrops(itemName, raidKey, itemToPersonTable)
-                util:AddToDrops(raidKey, itemToPersonTable, quality)
-                if quality and quality >= OnyFansLoot.minQualityToLogLoot then
-                    OnyFansLoot.lastLootmsg =  "ITEM:" .. playerName .. ":" .. itemId .. ":" .. raidKey
-                    SendAddonMessage(OnyFansLoot.itemDropPrefix, OnyFansLoot.lastLootmsg, "GUILD")
+                if not util:IsItemBlackListed(string.lower(itemName)) then
+                    itemToPersonTable[itemName] = string.lower(playerName)
+                    util:AddToListDrops(itemName, raidKey, itemToPersonTable)
+                    util:AddToDrops(raidKey, itemToPersonTable, quality)
+                    if quality and quality >= OnyFansLoot.minQualityToLogLoot then
+                        OnyFansLoot.lastLootmsg =  "ITEM:" .. playerName .. ":" .. itemId .. ":" .. raidKey
+                        SendAddonMessage(OnyFansLoot.itemDropPrefix, OnyFansLoot.lastLootmsg, "GUILD")
+                    end
                 end
             end
         end
