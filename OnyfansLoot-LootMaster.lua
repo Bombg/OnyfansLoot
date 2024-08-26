@@ -20,10 +20,10 @@ OfLootMaster:SetScript("OnEvent", function ()
             local isEpic = false
             for i = 1, GetNumLootItems() do
                 local lootIcon, lootName, lootQuantity, rarity, locked, isQuestItem, questId, isActive = GetLootSlotInfo(i)
-                if rarity >= minRarityForAnnouncement then
+                if lootname and rarity and rarity >= minRarityForAnnouncement and not util:IsItemBlackListed(string.lower(lootName)) then
                     lootDropString = lootDropString .. GetLootSlotLink(i) .. " "
                     isEpic = true
-                elseif rarity >= minRarityToGroupWith then
+                elseif lootName and rarity and rarity >= minRarityToGroupWith and not util:IsItemBlackListed(string.lower(lootName)) then
                     blueDropstring = blueDropstring .. GetLootSlotLink(i) .. " "
                 end
             end
