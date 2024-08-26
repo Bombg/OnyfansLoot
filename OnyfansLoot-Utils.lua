@@ -399,22 +399,29 @@ function util:CleanImportedTable()
     end
 end
 
-function util:ValidateImportedTable() --TODO: REFACTOR
-    local lootStartsAt = 7
-    local listsStartAt = 2
-    local lootLiveDateInd = 3
-    local oneTwoLiveDateInd = 4
-    local invalidItems = "These items are spelled incorrectly or are not on active raids loot list\nInvalid Item Names:\n\n"
-    local invalidItemsDummy = "These items are spelled incorrectly or are not on active raids loot list\nInvalid Item Names:\n\n"
+function util:GetInvalidGuildMemberNames()
     local invalidNames = "Mispselled player names, or not on guild roster: \n\n"
     local invalidNamesDummy = "Mispselled player names, or not on guild roster: \n\n"
+    local invalidNamesFooter = "\n\n Please fix player name mispellings in source list and reimport\n\n---------------------------------------------------------------------------------\n"
+    local listsStartAt = 2
     for i = listsStartAt, table.getn(ImportedTable) do
         local playerName = string.lower(ImportedTable[i][1])
-        local lootLiveDate = ImportedTable[i][lootLiveDateInd]
-        local oneTwoLiveDate = ImportedTable[i][oneTwoLiveDateInd]
         if not self:IsValidPlayerName(playerName) then
             invalidNames = invalidNames .. playerName .. "\n"
         end
+    end
+    if invalidNames == invalidNamesDummy then invalidNames = nil else invalidNames = invalidNames .. invalidNamesFooter end
+    return invalidNames
+end
+
+function util:GetInvalidItemNames()
+    local lootStartsAt = 7
+    local listsStartAt = 2
+    local invalidItems = "---------------------------------------------------------------------------------\nThese items are spelled incorrectly or are not on active raids loot list\n\nInvalid Item Names:\n\n"
+    local invalidItemsDummy = "---------------------------------------------------------------------------------\nThese items are spelled incorrectly or are not on active raids loot list\n\nInvalid Item Names:\n\n"
+    local invalidItemsFooter =  "\n\n These items are deleted from the list. If you want them to stay fix their spellings in the source list and reimport\n" .. 
+                                        "Once you are satisfied, stage the list with the /of stage command\n\n---------------------------------------------------------------------------------\n"
+    for i = listsStartAt, table.getn(ImportedTable) do
         for j = lootStartsAt, table.getn(ImportedTable[i]) do
             if not self:IsEmptyString(ImportedTable[i][j]) and not self:IsValidItemName(string.lower(ImportedTable[i][j])) then
                 invalidItems = invalidItems .. ImportedTable[i][1] .. ": " .. ImportedTable[i][j] .. "\n"
@@ -422,26 +429,41 @@ function util:ValidateImportedTable() --TODO: REFACTOR
             end
         end
     end
-    if invalidItems ~= invalidItemsDummy or invalidNames ~= invalidNamesDummy then
-        local finalText 
-        if invalidItems ~= invalidItemsDummy then
-            invalidItems = invalidItems .. "\n\n These items are deleted from the list. If you want them to stay fix their spellings in the source list and reimport\n" .. 
-                                        "Once you are satisfied, stage the list with the /of stage command\n\n"
-            finalText = invalidItems
-        end
-        if invalidNames ~= invalidNamesDummy then
-            invalidNames = invalidNames .. "\n\n Please fix player name mispellings in source list and reimport"
-            if finalText then
-                finalText = finalText .. invalidNames
-            else
-                finalText = invalidNames
-            end
-        end
+    if invalidItems == invalidItemsDummy then invalidItems = nil else invalidItems = invalidItems .. invalidItemsFooter end
+    return invalidItems
+end
+
+function util:GetInvalidDates()
+    local listsStartAt = 2
+    local lootLiveDateInd = 3
+    local oneTwoLiveDateInd = 4
+    local invalidDates = "\nThese dates are not in the correct mm/dd format. Please fix them and reimport\n\n"
+    local invalidDatesDummy = "\nThese dates are not in the correct mm/dd format. Please fix them and reimport\n\n"
+    for i = listsStartAt, table.getn(ImportedTable) do
+        local lootLiveDate = not self:IsEmptyString(ImportedTable[i][lootLiveDateInd]) and ImportedTable[i][lootLiveDateInd] or "06/11" -- Making empty string a valid date so it's ignored
+        local oneTwoLiveDate = not self:IsEmptyString(ImportedTable[i][oneTwoLiveDateInd]) and ImportedTable[i][oneTwoLiveDateInd] or "06/11"
+        invalidDates = not self:IsValidInputDate(lootLiveDate) and invalidDates .. lootLiveDate or invalidDates
+        invalidDates = not self:IsValidInputDate(oneTwoLiveDate) and invalidDates .. oneTwoLiveDate or invalidDates
+    end
+    if invalidDates == invalidDatesDummy then invalidDates = nil  end
+    return invalidDates
+end
+
+function util:ValidateImportedTable()
+    local finalText = " "
+    local invalidNames = self:GetInvalidGuildMemberNames()
+    local invalidItems = self:GetInvalidItemNames()
+    local invalidDates = self:GetInvalidDates()
+
+    finalText = invalidItems and finalText .. invalidItems  or finalText
+    finalText = invalidNames and finalText .. invalidNames  or finalText
+    finalText = invalidDates and finalText .. invalidDates or finalText
+    
+    if finalText ~= " " then
         self:ShowExportFrame(finalText)
     else
-        DEFAULT_CHAT_FRAME:AddMessage("No invalid names found")
+        DEFAULT_CHAT_FRAME:AddMessage("No invalid names found in import. Congrats!")
     end
-    
 end
 
 -- From https://github.com/trumpetx/ChatLootBidder
@@ -601,11 +623,13 @@ function util:IsInputDatePassed(inputDate)
 end
 
 function util:IsValidInputDate(inputDate) -- mm/dd mm/d m/dd m/d
-    local inMonth, inDay = util:StrSplit("/", inputDate)
     local isValid = false
-    if inMonth and inDay then
-        if tonumber(inMonth) < 13 and tonumber(inMonth) > 0 and tonumber(inDay) < 32 and tonumber(inDay) > 0 then
-            isValid = true
+    if inputDate then
+        local inMonth, inDay = util:StrSplit("/", inputDate)
+        if inMonth and inDay then
+            if tonumber(inMonth) < 13 and tonumber(inMonth) > 0 and tonumber(inDay) < 32 and tonumber(inDay) > 0 then
+                isValid = true
+            end
         end
     end
     return isValid
