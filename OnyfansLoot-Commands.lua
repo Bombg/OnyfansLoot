@@ -20,16 +20,20 @@ SlashCmdList["OF"] = function(msg)
         DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000stage |r: stages csv import so you can test it on tooltips before sharing it")
         DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000commit |r: commit staged changes so its shared with everyone. Assuming higher list version")
     elseif msg1 and msg1 == "import" then
-        local instructions = "************DELETE ALL THIS TEXT BEFORE PASTING IN YOUR CSV************\n\n" ..
+        if util:IsAllowedToImport() then
+            local instructions = "************DELETE ALL THIS TEXT BEFORE PASTING IN YOUR CSV************\n\n" ..
                         "******************INSTRUCTIONS******************\n" ..
                         "DELETE ALL ITEMS WITH STRIKETHROUGH IN SOURCE LIST\n".. 
                         "STRIKETHROUGH IS NOT IMPORTED INTO CSV SO ANY IMPORT CANNOT TELL THE DIFFERENCE\n" ..
                         "IF A LIST ITEM IS MISSPELLED IT WILL NOT WORK\n\n"..
-                        "THE LIST WILL BE CROSSED CHECKED WITH ATLASLOOT FOR MISSPELLINGS" .. 
+                        "THE LIST WILL BE CROSSED CHECKED WITH ATLASLOOT FOR MISSPELLINGS\n\n" .. 
                         "************DELETE ALL THIS TEXT BEFORE PASTING IN YOUR CSV************\n\n"
-        ImportFrameHeaderString:SetText("CSV Import")
-        ImportFrameText:SetText(instructions)
-        ShowUIPanel(ImportFrame, 1)
+            ImportFrameHeaderString:SetText("CSV Import")
+            ImportFrameText:SetText(instructions)
+            ShowUIPanel(ImportFrame, 1)
+        else
+            DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: Sorry you need to be an officer or GM to import")
+        end
     elseif msg1 and msg1 == "stage" then
         if not util:IsTableEmpty(ImportedTable) then
             util:StageImportedList()

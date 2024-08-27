@@ -21,6 +21,7 @@ The loot list addon for OnyFans
     - Keeps track of dropped items that are on any players list and who got that item
     - Keeps track of all raid drops
     - Export these with the '/of export' or '/of export help' command
+- Syncs the list with other raid members who are also on the loot list and have active lists
 
 ## Screenshots & Gifs
 - Holding Alt over an inventory item
@@ -50,7 +51,7 @@ The loot list addon for OnyFans
 ## Limitations
 - If any of the items in the loot list or master loot list are misspelled this won't work
 - For now, this does not update the list when people get items from their list 
-    - List updates are sent out by whomever imports the list from csv
+    - List updates are sent out by whomever imports the list from csv but you need to be on a list to get sent it
 - Before importing from CSV, all items with strikethrough need to be deleted. Unfortunately strikethough cannot be put into a CSV.
 
 ## Commands
@@ -69,6 +70,8 @@ The loot list addon for OnyFans
 
 ## How to Import From CSV
 **** IT IS HIGHLY RECOMMENDED YOU HAVE [AtlasLoot](https://github.com/Lexiebean/AtlasLoot/) INSTALLED ****
+
+*** YOU MUST BE OFFICER OR GM IN ORDER TO IMPORT ****
 1. Go to the lootlist Google spreadsheet hit ctrl+a to highlight everything and ctrl+c to copy everything
 2. Paste a copy of the sheet in a completely new Google spreadsheet somewhere else. This is so you can modify it
 3. Delete any item cell that has strikethrough. Strikethrough is lost when converting to CSV, so get rid of any cell with it now

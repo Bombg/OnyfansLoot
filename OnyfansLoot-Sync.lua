@@ -59,7 +59,7 @@ OfSync:SetScript("OnEvent", function ()
                 lastAsk = time()
                 SendAddonMessage(OnyFansLoot.listAskPrefix, "ASK:" .. broadcastedListVersion .. ":" .. sender, "GUILD")
             end
-        elseif prefix and prefix == OnyFansLoot.listAskPrefix then
+        elseif prefix and sender and prefix == OnyFansLoot.listAskPrefix and util:IsOnList(string.lower(sender)) then
             local _,askVersion, requestFrom = util:StrSplit(":",message)
             if localListVersion == tonumber(askVersion) and requestFrom == OnyFansLoot.playerName then
                 SendLootList(sender)

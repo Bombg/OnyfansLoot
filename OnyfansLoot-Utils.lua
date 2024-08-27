@@ -73,9 +73,9 @@ util.GetGuildRank = function (self,playerUnitId)
     return guildRank
 end
 
-util.IsAllowedToHaveList = function (self) -- Tier 1's have lists so nevermind. Not quite as simple as making it rank limited. Maybe come back to this later. 1  = GM, 2 = Twitch Mod, 3 = Foot Model, 4 = Tier 2
+util.IsAllowedToImport = function (self) --  1  = GM, 2 = Twitch Mod, 3 = Foot Model, 4 = Tier 2
     local allowed = false
-    for i = 1,4 do
+    for i = 1,2 do
         if self:GetGuildRank("player") == GuildControlGetRankName(i) then
             allowed = true
             break
@@ -688,6 +688,19 @@ function util:PopulateGuildRoster()
     if turnOff then
         SetGuildRosterShowOffline(false)
     end
+end
+
+function util:IsOnList(playerName)
+    local isOnList = false
+    for k, v in pairs(OfLoot) do
+        for key, val in pairs(v) do
+            if string.lower(playerName) == string.lower(key) then
+                isOnList = true
+                break
+            end
+        end
+    end
+    return isOnList
 end
 
 OnyFansLoot.util = util
