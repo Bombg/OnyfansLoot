@@ -51,20 +51,20 @@ end
 
 OnyfansGameTooltip = CreateFrame("Frame","OnyfansGameToolTip",GameTooltip)
 OnyfansGameTooltip:SetScript("OnShow", function (self)
-    if GameTooltip then
-        if not GameTooltip.itemLink then return end
-        local lbl = getglobal("GameTooltipTextLeft1")
-        if lbl then
-            local tLine = lbl:GetText()
-            tLine = string.lower(tLine)
-            AddLootListToToolTip(GameTooltip,tLine)
+    if GameTooltip and GameTooltip.itemLink then
+        local itemString = OnyFansLoot.util:ItemLinkToItemString(GameTooltip.itemLink)
+        if itemString then
+            local itemName, itemstring, quality, level, class, subclass, max_stack, slot, texture = GetItemInfo(itemString)
+            if itemName then
+                AddLootListToToolTip(GameTooltip, itemName)
+            end
         end
     end
 end)
 
 OnyFansLoot:SecureHook(GameTooltip, "SetLootItem", function(this, slot)
-        local itemLink = OnyFansLoot.util:ItemLinkToItemString(GetLootSlotLink(slot))
-        local itemName, itemstring, quality, level, class, subclass, max_stack, slot, texture = GetItemInfo(itemLink)
+        local itemString = OnyFansLoot.util:ItemLinkToItemString(GetLootSlotLink(slot))
+        local itemName, itemstring, quality, level, class, subclass, max_stack, slot, texture = GetItemInfo(itemString)
             if itemName then
                 AddLootListToToolTip(GameTooltip, string.lower(itemName))
             end
