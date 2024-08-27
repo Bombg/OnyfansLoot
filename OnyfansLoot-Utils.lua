@@ -589,7 +589,7 @@ function util:GetLootModifier(i,j)
     if not self:IsEmptyString(ImportedTable[i][AttendanceModifierLoc])  then
         modifier = 0
         if j == lootStartsAt then
-            modifier = tonumber(ImportedTable[i][AttendanceModifierLoc]) + 1
+            modifier = tonumber(ImportedTable[i][AttendanceModifierLoc]) + 1 -- +1 because people's #1 goes from 1 to -1, skipping 0
         else
             modifier = tonumber(ImportedTable[i][AttendanceModifierLoc])
         end
