@@ -44,7 +44,8 @@ OfLootDrops:SetScript("OnEvent", function ()
                 local hasDropsList, dropsListIndex = util:HasThisLootDroppedThisRaid(raidKey, item, giver, Drops)
                 if hasListDropped then
                     OfDrops[raidKey][listDropIndex][item] = receiver
-                elseif hasDropsList then
+                end
+                if hasDropsList then
                     Drops[raidKey][dropsListIndex][item] = receiver
                 end
             end
