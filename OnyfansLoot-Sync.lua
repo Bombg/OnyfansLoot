@@ -76,6 +76,7 @@ OfSync:SetScript("OnEvent", function ()
                 local itemName, _, quality, level, class, subclass, max_stack, slot, texture = GetItemInfo(itemId)
                 if itemName and quality then
                     local itemToPersonTable  = {}
+                    DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000[OnyFansLoot]|r " .. playerName .. "received " .. itemName)
                     itemToPersonTable[itemName] = string.lower(playerName)
                     util:AddToListDrops(itemName, raidKey, itemToPersonTable)
                     util:AddToDrops(raidKey, itemToPersonTable, quality)
