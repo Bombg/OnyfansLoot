@@ -731,10 +731,11 @@ function IsSpellInSpellBook(inputSpellName)
     return isInBook
 end
 
-function util:IsDisenchantedRaidItem(itemName)
+function util:IsDisenchantedRaidItem(itemName,chatMsg)
     local isDERaidItem = false
     local minDETime = 3
-    if OnyFansLoot.lastDisenchantTime and OnyFansLoot.lastDisenchantedItem then
+    local youGotString = "You receive"
+    if OnyFansLoot.lastDisenchantTime and OnyFansLoot.lastDisenchantedItem and string.find(chatMsg, youGotString) then
         local timeSinceDESpell = GetTime() - OnyFansLoot.lastDisenchantTime
         if string.lower(itemName) == "nexus crystal" or string.lower(itemName) == "large brilliant shard" and timeSinceDESpell >= minDETime then
             isDERaidItem = true

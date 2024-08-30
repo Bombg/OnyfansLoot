@@ -27,7 +27,7 @@ OfLootDrops:SetScript("OnEvent", function ()
                         OnyFansLoot.lastLootmsg =  "ITEM:" .. playerName .. ":" .. itemId .. ":" .. raidKey
                         SendAddonMessage(OnyFansLoot.itemDropPrefix, OnyFansLoot.lastLootmsg, "GUILD")
                     end
-                elseif util:IsDisenchantedRaidItem(itemName) then
+                elseif util:IsDisenchantedRaidItem(itemName,chatMsg) then
                     if OnyFansLoot.lastDisenchantedItem then
                         local _, _, itemNameFromLink = util:GetItemLinkParts(OnyFansLoot.lastDisenchantedItem)
                         if itemNameFromLink then
