@@ -703,24 +703,6 @@ function util:IsOnList(playerName)
     return isOnList
 end
 
-function util:PairsByTime (t)
-    local a = {}
-    for n in pairs(t) do table.insert(a, n) end
-    table.sort(a, self.SortByTime)
-    local i = 0      -- iterator variable
-    local iter = function ()   -- iterator function
-        i = i + 1
-        if a[i] == nil then return nil
-        else return a[i], t[a[i]]
-        end
-    end
-    return iter
-end
-
-function util.SortByTime(a, b)
-    return tonumber(a) < tonumber(b)
-end
-
 function util:IsValueInTable(table, value)
     local isContained = false
     local key
@@ -732,40 +714,6 @@ function util:IsValueInTable(table, value)
         end
     end
     return isContained, key
-end
-
-function util:AddToPastItemStrings(itemString, time)
-    local maximumItemStrings = 5
-    local newValue = {}
-    if not OnyFansLoot.pastItemStrings then OnyFansLoot.pastItemStrings = {} end
-    local isContained, key = self:IsValueInTable(OnyFansLoot.pastItemStrings, itemString)
-    if isContained then
-        OnyFansLoot.pastItemStrings[key] = nil 
-    end
-    OnyFansLoot.pastItemStrings[tostring(time)] = itemString
-    if self:NumTableEntries( OnyFansLoot.pastItemStrings) > maximumItemStrings then
-        for k, v in self:PairsByTime(OnyFansLoot.pastItemStrings) do
-            OnyFansLoot.pastItemStrings[k] = nil
-            break
-        end
-    end
-end
-
-function util:GetItemStringClosestTime(time)
-    local min = 9999999999
-    local minKey
-    local down, up, lagHome, lagWorld = GetNetStats()
-    for k, v in pairs(OnyFansLoot.pastItemStrings) do
-        local num = (time - (lagHome*2)/1000)  - tonumber(k)
-        --print(tostring(num))
-        if math.abs(num) < min and num < 0 then
-            min = num
-            minKey = k
-        end
-    end
-    local itemName, itemstring, quality, level, class, subclass, max_stack, slot, texture = GetItemInfo(OnyFansLoot.pastItemStrings[minKey])
-    print(itemName)
-    print("-------------")
 end
 
 function IsSpellInSpellBook(inputSpellName)
@@ -781,6 +729,19 @@ function IsSpellInSpellBook(inputSpellName)
         i = i + 1
     end
     return isInBook
+end
+
+function util:IsDisenchantedRaidItem(itemName)
+    local isDERaidItem = false
+    local minDETime = 3
+    local maxDETime = 4
+    if OnyFansLoot.lastDisenchantTime and OnyFansLoot.lastDisenchantedItem then
+        local timeSinceDESpell = GetTime() - OnyFansLoot.lastDisenchantTime
+        if string.lower(itemName) == "nexus crystal" or string.lower(itemName) == "large brilliant shard" and timeSinceDESpell >= minDETime and timeSinceDESpell <= maxDETime then
+            isDERaidItem = true
+        end
+    end
+    return isDERaidItem
 end
 
 OnyFansLoot.util = util

@@ -26,6 +26,12 @@ OfLootDrops:SetScript("OnEvent", function ()
                         OnyFansLoot.lastLootmsg =  "ITEM:" .. playerName .. ":" .. itemId .. ":" .. raidKey
                         SendAddonMessage(OnyFansLoot.itemDropPrefix, OnyFansLoot.lastLootmsg, "GUILD")
                     end
+                elseif util:IsDisenchantedRaidItem(itemName) then
+                    local _, _, itemNameFromLink = util:GetItemLinkParts(OnyFansLoot.lastDisenchantedItem)
+                    if itemNameFromLink then
+                        itemNameFromLink = string.lower(itemNameFromLink)
+                        HandleItemTransition(string.lower(OnyFansLoot.playerName), "disenchant",itemNameFromLink,util:GetRaidKey())
+                    end
                 end
             end
         end
@@ -37,18 +43,24 @@ OfLootDrops:SetScript("OnEvent", function ()
             local raidKey = util:GetRaidKey()
             local giver, item, receiver = string.match(message, regex)
             if giver and item and receiver then
-                giver = string.lower(giver)
-                item = string.lower(item)
-                receiver = string.lower(receiver)
-                local hasListDropped, listDropIndex = util:HasThisLootDroppedThisRaid(raidKey, item, giver, OfDrops)
-                local hasDropsList, dropsListIndex = util:HasThisLootDroppedThisRaid(raidKey, item, giver, Drops)
-                if hasListDropped then
-                    OfDrops[raidKey][listDropIndex][item] = receiver
-                end
-                if hasDropsList then
-                    Drops[raidKey][dropsListIndex][item] = receiver
-                end
+                HandleItemTransition(giver, receiver, item, raidKey)
             end
         end
     end
 end)
+
+function HandleItemTransition(giver, receiver, item, raidKey)
+    if giver and receiver and item and raidKey then
+        giver = string.lower(giver)
+        item = string.lower(item)
+        receiver = string.lower(receiver)
+        local hasListDropped, listDropIndex = util:HasThisLootDroppedThisRaid(raidKey, item, giver, OfDrops)
+        local hasDropsList, dropsListIndex = util:HasThisLootDroppedThisRaid(raidKey, item, giver, Drops)
+        if hasListDropped then
+            OfDrops[raidKey][listDropIndex][item] = receiver
+        end
+        if hasDropsList then
+            Drops[raidKey][dropsListIndex][item] = receiver
+        end
+    end
+end

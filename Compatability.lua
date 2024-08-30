@@ -61,3 +61,9 @@ if not hooksecurefunc then
         end
     end
 end
+
+if not print then
+    function print(msg)
+        DEFAULT_CHAT_FRAME:AddMessage(msg)
+    end
+end

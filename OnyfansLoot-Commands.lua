@@ -19,6 +19,7 @@ SlashCmdList["OF"] = function(msg)
         DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000import |r: brings up a window to import from csv")
         DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000stage |r: stages csv import so you can test it on tooltips before sharing it")
         DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000commit |r: commit staged changes so its shared with everyone. Assuming higher list version")
+        DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000disenchant |r: One click disenchanting command. Macro this. Checks if item is enchanted as well")
     elseif msg1 and msg1 == "import" then
         if util:IsAllowedToImport() then
             local instructions = "************DELETE ALL THIS TEXT BEFORE PASTING IN YOUR CSV************\n\n" ..
@@ -52,7 +53,8 @@ SlashCmdList["OF"] = function(msg)
         else
             DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: Nothing currently staged to commit")
         end
-        
+    elseif msg1 and msg1 == 'disenchant' then
+        DisenchantCommand()
     end
 end 
 
@@ -71,4 +73,63 @@ function GetExportData(msg2)
         data = util:ExportLootTablesAsString(lastKeys[1])
     end 
     return data
+end
+
+function DisenchantCommand()
+    local canDisenchant =  IsSpellInSpellBook("Disenchant")
+    local focus = GetMouseFocus()
+    local slotID = focus:GetID()
+    if focus:GetParent() then
+        local bagID = focus:GetParent():GetID()
+        if bagID then
+            local itemLink = GetContainerItemLink(bagID, slotID)
+            if itemLink and canDisenchant then
+                HandleDisenchantGlobal(itemLink)
+                local hexColor, itemString, itemName = util:GetItemLinkParts(itemLink)
+                if itemString then
+                    HandleDisenchanting(itemString, bagID, slotID, itemLink)
+                end
+            elseif not canDisenchant then
+                DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: You're not an enchanter or an error getting an item's ID ")
+            end
+        end
+    end
+end
+
+function DisenchantBagItem(bagID, slotID)
+    CastSpellByName("Disenchant")
+    PickupContainerItem(bagID,slotID)
+    OnyFansLoot.lastDisenchantedItem = itemLink
+    OnyFansLoot.LastDisenchantedItemCount = 0
+    OnyFansLoot.lastDisenchantTime = GetTime()
+end
+
+function HandleDisenchanting(itemString, bagID, slotID, itemLink)
+    local timesToDisenchantEnchanted = 3
+    local minQualityToDisenchant = 2
+    local  itemId, enchantId, suffixId, uniqueId = util:GetItemStringParts(itemString)
+    local _, _, quality, level, class, subclass, max_stack, slot, texture = GetItemInfo(itemId)
+
+    if tonumber(quality) >= minQualityToDisenchant and tonumber(level) > 0 then
+        if tonumber(enchantId) == 0 then
+            DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: |cff9482c9DISENCHANTING|r ".. itemLink)
+            DisenchantBagItem(bagID,slotID)
+        elseif OnyFansLoot.LastDisenchantedItemCount >= timesToDisenchantEnchanted then
+            DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: |cff9482c9DISENCHANTING|r ".. itemLink .. " with enchantID:" ..  enchantId)
+            DisenchantBagItem(bagID,slotID)
+        else
+            OnyFansLoot.lastDisenchantedItem = itemLink
+            DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r:".. itemLink .. " is ENCHANTED. Press  |cff9482c9" .. (timesToDisenchantEnchanted - OnyFansLoot.LastDisenchantedItemCount) .. "|r more times to disenchant.")
+        end
+    else
+        DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: You can't disenchant " .. itemLink)
+    end
+end
+
+function HandleDisenchantGlobal(itemLink)
+    if not OnyFansLoot.LastDisenchantedItemCount or OnyFansLoot.lastDisenchantedItem ~= itemLink then
+        OnyFansLoot.LastDisenchantedItemCount = 0
+    elseif OnyFansLoot.lastDisenchantedItem == itemLink then
+        OnyFansLoot.LastDisenchantedItemCount = OnyFansLoot.LastDisenchantedItemCount + 1
+    end
 end
