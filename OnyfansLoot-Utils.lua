@@ -734,10 +734,9 @@ end
 function util:IsDisenchantedRaidItem(itemName)
     local isDERaidItem = false
     local minDETime = 3
-    local maxDETime = 4
     if OnyFansLoot.lastDisenchantTime and OnyFansLoot.lastDisenchantedItem then
         local timeSinceDESpell = GetTime() - OnyFansLoot.lastDisenchantTime
-        if string.lower(itemName) == "nexus crystal" or string.lower(itemName) == "large brilliant shard" and timeSinceDESpell >= minDETime and timeSinceDESpell <= maxDETime then
+        if string.lower(itemName) == "nexus crystal" or string.lower(itemName) == "large brilliant shard" and timeSinceDESpell >= minDETime then
             isDERaidItem = true
         end
     end

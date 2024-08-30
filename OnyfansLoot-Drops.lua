@@ -1,6 +1,7 @@
 local OfLootDrops = CreateFrame("Frame")
 local util = OnyFansLoot.util
 OnyFansLoot.itemDropPrefix  = "ofitem"
+OnyFansLoot.itemCorrectionPrefix = "ofitemcorrection"
 
 OfLootDrops:RegisterEvent("CHAT_MSG_LOOT")
 OfLootDrops:RegisterEvent("CHAT_MSG_SYSTEM")
@@ -27,10 +28,17 @@ OfLootDrops:SetScript("OnEvent", function ()
                         SendAddonMessage(OnyFansLoot.itemDropPrefix, OnyFansLoot.lastLootmsg, "GUILD")
                     end
                 elseif util:IsDisenchantedRaidItem(itemName) then
-                    local _, _, itemNameFromLink = util:GetItemLinkParts(OnyFansLoot.lastDisenchantedItem)
-                    if itemNameFromLink then
-                        itemNameFromLink = string.lower(itemNameFromLink)
-                        HandleItemTransition(string.lower(OnyFansLoot.playerName), "disenchant",itemNameFromLink,util:GetRaidKey())
+                    if OnyFansLoot.lastDisenchantedItem then
+                        local _, _, itemNameFromLink = util:GetItemLinkParts(OnyFansLoot.lastDisenchantedItem)
+                        if itemNameFromLink then
+                            local receiver = "disenchant"
+                            itemNameFromLink = string.lower(itemNameFromLink)
+                            local listDrop, itemDrop = HandleItemTransition(string.lower(OnyFansLoot.playerName), receiver,itemNameFromLink,util:GetRaidKey())
+                            if listDrop or itemDrop then
+                                local itemCorrectionMessage = string.lower(OnyFansLoot.playerName) .. ":" .. receiver .. ":" .. itemNameFromLink
+                                SendAddonMessage(OnyFansLoot.itemCorrectionPrefix, itemCorrectionMessage, "GUILD")
+                            end
+                        end
                     end
                 end
             end
@@ -50,12 +58,14 @@ OfLootDrops:SetScript("OnEvent", function ()
 end)
 
 function HandleItemTransition(giver, receiver, item, raidKey)
+    local hasListDropped, listDropIndex 
+    local hasDropsList, dropsListIndex
     if giver and receiver and item and raidKey then
         giver = string.lower(giver)
         item = string.lower(item)
         receiver = string.lower(receiver)
-        local hasListDropped, listDropIndex = util:HasThisLootDroppedThisRaid(raidKey, item, giver, OfDrops)
-        local hasDropsList, dropsListIndex = util:HasThisLootDroppedThisRaid(raidKey, item, giver, Drops)
+        hasListDropped, listDropIndex = util:HasThisLootDroppedThisRaid(raidKey, item, giver, OfDrops)
+        hasDropsList, dropsListIndex = util:HasThisLootDroppedThisRaid(raidKey, item, giver, Drops)
         if hasListDropped then
             OfDrops[raidKey][listDropIndex][item] = receiver
         end
@@ -63,4 +73,5 @@ function HandleItemTransition(giver, receiver, item, raidKey)
             Drops[raidKey][dropsListIndex][item] = receiver
         end
     end
+    return hasListDropped, hasDropsList
 end

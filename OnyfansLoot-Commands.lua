@@ -96,7 +96,7 @@ function DisenchantCommand()
     end
 end
 
-function DisenchantBagItem(bagID, slotID)
+function DisenchantBagItem(bagID, slotID, itemLink)
     CastSpellByName("Disenchant")
     PickupContainerItem(bagID,slotID)
     OnyFansLoot.lastDisenchantedItem = itemLink
@@ -113,10 +113,10 @@ function HandleDisenchanting(itemString, bagID, slotID, itemLink)
     if tonumber(quality) >= minQualityToDisenchant and tonumber(level) > 0 then
         if tonumber(enchantId) == 0 then
             DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: |cff9482c9DISENCHANTING|r ".. itemLink)
-            DisenchantBagItem(bagID,slotID)
+            DisenchantBagItem(bagID,slotID, itemLink)
         elseif OnyFansLoot.LastDisenchantedItemCount >= timesToDisenchantEnchanted then
             DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: |cff9482c9DISENCHANTING|r ".. itemLink .. " with enchantID:" ..  enchantId)
-            DisenchantBagItem(bagID,slotID)
+            DisenchantBagItem(bagID,slotID, itemLink)
         else
             OnyFansLoot.lastDisenchantedItem = itemLink
             DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r:".. itemLink .. " is ENCHANTED. Press  |cff9482c9" .. (timesToDisenchantEnchanted - OnyFansLoot.LastDisenchantedItemCount) .. "|r more times to disenchant.")

@@ -81,6 +81,11 @@ OfSync:SetScript("OnEvent", function ()
                     util:AddToDrops(raidKey, itemToPersonTable, quality)
                 end
             end
+        elseif prefix and prefix == OnyFansLoot.itemCorrectionPrefix then
+            local giver, receiver, itemName = util:StrSplit(":",message)
+            if giver and receiver and itemName then
+                HandleItemTransition(giver, receiver,itemName,util:GetRaidKey())
+            end
         end
     end
 end)
