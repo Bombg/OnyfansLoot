@@ -76,7 +76,7 @@ OfSync:SetScript("OnEvent", function ()
                 local itemName, _, quality, level, class, subclass, max_stack, slot, texture = GetItemInfo(itemId)
                 if itemName and quality then
                     local itemToPersonTable  = {}
-                    DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000[OnyFansLoot]|r " .. playerName .. "received " .. itemName)
+                    DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000[OnyFansLoot]|r " .. playerName .. " received " .. itemName)
                     itemToPersonTable[itemName] = string.lower(playerName)
                     util:AddToListDrops(itemName, raidKey, itemToPersonTable)
                     util:AddToDrops(raidKey, itemToPersonTable, quality)
@@ -85,7 +85,10 @@ OfSync:SetScript("OnEvent", function ()
         elseif prefix and prefix == OnyFansLoot.itemCorrectionPrefix then
             local giver, receiver, itemName = util:StrSplit(":",message)
             if giver and receiver and itemName then
-                HandleItemTransition(giver, receiver,itemName,util:GetRaidKey())
+                local hasList, hasDrop = HandleItemTransition(giver, receiver,itemName,util:GetRaidKey())
+                if hasList or hasDrop then
+                    DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000[OnyFansLoot]|r " .. itemName .. " went to  " .. receiver)
+                end
             end
         end
     end
