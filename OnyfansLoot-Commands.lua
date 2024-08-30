@@ -110,7 +110,7 @@ function HandleDisenchanting(itemString, bagID, slotID, itemLink)
     local  itemId, enchantId, suffixId, uniqueId = util:GetItemStringParts(itemString)
     local _, _, quality, level, class, subclass, max_stack, slot, texture = GetItemInfo(itemId)
 
-    if tonumber(quality) >= minQualityToDisenchant and tonumber(level) > 0 then
+    if tonumber(quality) >= minQualityToDisenchant then
         if tonumber(enchantId) == 0 then
             DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: |cff9482c9DISENCHANTING|r ".. itemLink)
             DisenchantBagItem(bagID,slotID, itemLink)
