@@ -20,6 +20,7 @@ The loot list addon for OnyFans
     - Broadcasts loot drops to other OnyFansLoot users who are out of range to recieve "so and so recieves xxxx" messages
     - Keeps track of dropped items that are on any players list and who got that item
     - Keeps track of all raid drops
+    - If disenchanter has the addon, also keeps track of loot that is disenchanted
     - Export these with the '/of export' or '/of export help' command
 - Syncs the list with other raid members who are also on the loot list and have active lists
 
@@ -39,6 +40,11 @@ The loot list addon for OnyFans
 - Holding Alt before hovering over AtlasLoot tooltip
 
 <img src="https://imgur.com/qKaG967.gif" width =400><br><br>
+
+- disenchant command, and enchanted item protection
+
+<img src="https://imgur.com/2RR2VJA.gif" width =400><br><br>
+
 
 ## Installation
 1. Download OnyFans Loot
@@ -67,6 +73,11 @@ The loot list addon for OnyFans
     - once the list has been imported, a window will pop up showing any errors with spelling in item names, guild member names, and date errors
 - /of stage - once you have cleared any erros with the import(or satisfied), this command will allow you to test the changes before you send them to anyone else.
 - /of commit - If you are satisfied with how the list was staged, you can commit these changes. They will then be sent out to everyone else (assuming higher list version)
+- /of disenchant - Updates exported drops list from whoever is disenchanting, (if they have the addon), to "disenchanted"
+    - This syncs to everyone who has the addon
+    - disenchant with only 1 press, if you macro the command.
+    - disenchanter is shown in chat what they are disenchanting
+    - has enchanted item protection, must press the button 3 times to disenchant an enchanted item
 
 ## How to Import From CSV
 **** IT IS HIGHLY RECOMMENDED YOU HAVE [AtlasLoot](https://github.com/Lexiebean/AtlasLoot/) INSTALLED ****
