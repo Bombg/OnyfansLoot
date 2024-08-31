@@ -1,6 +1,6 @@
 local OfLootMaster = CreateFrame("Frame")
-local minRarityForAnnouncement = 4
-local minRarityToGroupWith = 3
+local minRarityForAnnouncement = 0
+local minRarityToGroupWith = minRarityForAnnouncement - 1
 local timeBetweenLootBroadcast = 180
 local lootedTargetsTime = {}
 local util = OnyFansLoot.util
@@ -20,7 +20,7 @@ OfLootMaster:SetScript("OnEvent", function ()
             local isEpic = false
             for i = 1, GetNumLootItems() do
                 local lootIcon, lootName, lootQuantity, rarity, locked, isQuestItem, questId, isActive = GetLootSlotInfo(i)
-                if lootname and rarity and rarity >= minRarityForAnnouncement and not util:IsItemBlackListed(string.lower(lootName)) then
+                if lootName and rarity and rarity >= minRarityForAnnouncement and not util:IsItemBlackListed(string.lower(lootName)) then
                     lootDropString = lootDropString .. GetLootSlotLink(i) .. " "
                     isEpic = true
                 elseif lootName and rarity and rarity >= minRarityToGroupWith and not util:IsItemBlackListed(string.lower(lootName)) then

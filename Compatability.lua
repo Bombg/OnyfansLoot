@@ -13,9 +13,6 @@ if not strsplit then
     end
 end
 
-if not string.gmatch then
-    string.gmatch = string.gfind
-end
 
 if not string.match then
     local function getargs(s, e, ...)
