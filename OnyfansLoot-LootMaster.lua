@@ -1,5 +1,5 @@
 local OfLootMaster = CreateFrame("Frame")
-local minRarityForAnnouncement = 0
+local minRarityForAnnouncement = 4
 local minRarityToGroupWith = minRarityForAnnouncement - 1
 local timeBetweenLootBroadcast = 180
 local lootedTargetsTime = {}
