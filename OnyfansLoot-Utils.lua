@@ -4,7 +4,7 @@ local util = {}
 OnyFansLoot.blackList = {
     "idol of the sun","idol of war","blue qiraji resonating crystal","idol of life","idol of death","idol of rebirth",
     "idol of strife","green qiraji resonating crystal","idol of night","large brilliant shard","idol of the sage", "yellow qiraji resonating crystal",
-    "fiery core", "lava core", "book: gift of the wild","elementium ore", "nexus crystal"
+    "fiery core", "lava core", "book: gift of the wild","elementium ore", "nexus crystal", "tome of frost ward v", "hydralick armor",
 }
 
 util.IsTableEmpty = function (self,table)
