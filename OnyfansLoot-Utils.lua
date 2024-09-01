@@ -220,10 +220,10 @@ util.AddToListDrops = function (self,itemName, raidKey, itemToPersonTable)
 end
 
 util.AddToDrops = function (self,raidKey, itemToPersonTable, quality)
-    if not self:DoesTableContainKey(Drops, raidKey) then
-        Drops[raidKey] = {}
-    end
-    if quality >= OnyFansLoot.minQualityToLogLoot then
+    if quality and itemToPersonTable and raidKey and quality >= OnyFansLoot.minQualityToLogLoot then
+        if not self:DoesTableContainKey(Drops, raidKey) then
+            Drops[raidKey] = {}
+        end
         table.insert(Drops[raidKey], itemToPersonTable)
     end
     
