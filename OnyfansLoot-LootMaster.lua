@@ -17,6 +17,7 @@ OfLootMaster:SetScript("OnEvent", function ()
         if util:IsAllowedToAnnounceLoot() then
             local lootDropString = ""
             local blueDropstring = ""
+            local listDrops = ""
             local isEpic = false
             for i = 1, GetNumLootItems() do
                 local lootIcon, lootName, lootQuantity, rarity, locked, isQuestItem, questId, isActive = GetLootSlotInfo(i)
@@ -26,11 +27,17 @@ OfLootMaster:SetScript("OnEvent", function ()
                 elseif lootName and rarity and rarity >= minRarityToGroupWith and not util:IsItemBlackListed(string.lower(lootName)) then
                     blueDropstring = blueDropstring .. GetLootSlotLink(i) .. " "
                 end
+                if lootName and util:IsListItem(string.lower(lootName)) then
+                    listDrops = listDrops .. GetLootSlotLink(i)
+                end
             end
             lootDropString = isEpic and lootDropString .. blueDropstring or lootDropString
             if unitName and not util:IsEmptyString(lootDropString) and (time() - lootedTargetsTime[unitName]) > timeBetweenLootBroadcast and util:IsInRaid()  then
                 lootedTargetsTime[unitName] = time()
                 SendChatMessage( lootDropString,"RAID")
+                if not util:IsEmptyString(listDrops) then
+                    DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000List Drops|r: " .. listDrops)
+                end
             end
         end
     end

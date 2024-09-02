@@ -207,6 +207,10 @@ util.GetRaidKey = function (self)
     return raidKey
 end
 
+function util:IsListItem(itemName)
+    return self:DoesTableContainKey(OfLoot, itemName)
+end
+
 util.AddToListDrops = function (self,itemName, raidKey, itemToPersonTable)
     if itemName and itemToPersonTable and self:DoesTableContainKey(OfLoot, itemName) then
         local playerName = itemToPersonTable[itemName]
