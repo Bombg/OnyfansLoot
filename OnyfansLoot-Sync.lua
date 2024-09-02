@@ -90,6 +90,14 @@ OfSync:SetScript("OnEvent", function ()
                     DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000[OnyFansLoot]|r " .. itemName .. " went to  " .. receiver)
                 end
             end
+        elseif prefix and prefix == OnyFansLoot.listDropPrefix then
+            local itemLink = message
+            if itemLink then
+                local hexColor, itemString, itemName = util:GetItemLinkParts(itemLink)
+                if itemName and util:IsPlayerListItem(string.lower(itemName))  then
+                    DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: " .. itemLink .. " Dropped. It's on your list")
+                end
+            end
         end
     end
 end)

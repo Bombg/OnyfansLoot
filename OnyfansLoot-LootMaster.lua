@@ -4,6 +4,7 @@ local minRarityToGroupWith = minRarityForAnnouncement - 1
 local timeBetweenLootBroadcast = 180
 local lootedTargetsTime = {}
 local util = OnyFansLoot.util
+OnyFansLoot.listDropPrefix = "oflistdrop"
 
 
 OfLootMaster:RegisterEvent("LOOT_OPENED")
@@ -29,6 +30,7 @@ OfLootMaster:SetScript("OnEvent", function ()
                 end
                 if lootName and util:IsListItem(string.lower(lootName)) then
                     listDrops = listDrops .. GetLootSlotLink(i)
+                    ChatThrottleLib:SendAddonMessage("NORMAL",OnyFansLoot.listDropPrefix,GetLootSlotLink(i),"GUILD")
                 end
             end
             lootDropString = isEpic and lootDropString .. blueDropstring or lootDropString

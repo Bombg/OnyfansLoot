@@ -211,6 +211,10 @@ function util:IsListItem(itemName)
     return self:DoesTableContainKey(OfLoot, itemName)
 end
 
+function util:IsPlayerListItem(itemName)
+    return self:DoesTableContainKey(OfLoot, itemName) and self:DoesTableContainKey(OfLoot[itemName], string.lower(OnyFansLoot.playerName))
+end
+
 util.AddToListDrops = function (self,itemName, raidKey, itemToPersonTable)
     if itemName and itemToPersonTable and self:DoesTableContainKey(OfLoot, itemName) then
         local playerName = itemToPersonTable[itemName]
