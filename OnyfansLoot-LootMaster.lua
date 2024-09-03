@@ -28,7 +28,7 @@ OfLootMaster:SetScript("OnEvent", function ()
                 elseif lootName and rarity and rarity >= minRarityToGroupWith and not util:IsItemBlackListed(string.lower(lootName)) then
                     blueDropstring = blueDropstring .. GetLootSlotLink(i) .. " "
                 end
-                if lootName and util:IsListItem(string.lower(lootName)) then
+                if unitName and lootName and util:IsListItem(string.lower(lootName)) and (time() - lootedTargetsTime[unitName]) > timeBetweenLootBroadcast and util:IsInRaid() then
                     listDrops = listDrops .. GetLootSlotLink(i)
                     ChatThrottleLib:SendAddonMessage("NORMAL",OnyFansLoot.listDropPrefix,GetLootSlotLink(i),"GUILD")
                 end
