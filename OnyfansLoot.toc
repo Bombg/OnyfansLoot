@@ -26,3 +26,4 @@ OnyfansLoot-Drops.lua
 OnyfansLoot-UI.xml
 OnyfansLoot-Import.xml
 OnyfansLoot-Commands.lua
+OnyfansLoot-Periodic.lua

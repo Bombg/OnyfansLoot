@@ -753,4 +753,52 @@ function util:IsDisenchantedRaidItem(itemName,chatMsg)
     return isDERaidItem
 end
 
+function util:GetFirstUnstagedListItem(startFrom, playerNameRow)
+    local oneTwoStartsAt = 9
+    local startingIndex = oneTwoStartsAt - 1 + startFrom
+    local listItem
+    local goTo = startFrom < 3 and 10 or table.getn(ImportedTable[playerNameRow])
+    for  i= startingIndex, goTo do
+        if not util:IsEmptyString(ImportedTable[playerNameRow][i]) then
+            listItem = ImportedTable[playerNameRow][i]
+            break
+        end
+    end
+    return listItem
+end
+
+function util:IsMemberListItem(itemName, memberName)
+    return self:DoesTableContainKey(OfLoot, string.lower(itemName)) and self:DoesTableContainKey(OfLoot[string.lower(itemName)], string.lower(memberName))
+end
+
+function util:CheckForMissingToolTips()
+    local listLiveIndex = 3
+    local oneTwoLiveIndex = 4
+    local playerNameIndex = 1
+    local nag = false
+    if ImportedTable and not util:IsTableEmpty(ImportedTable) then
+        for i = 2, table.getn(ImportedTable) do
+            if not util:IsEmptyString(ImportedTable[i][listLiveIndex]) and util:IsInputDatePassed(ImportedTable[i][listLiveIndex]) then
+                local playerName = ImportedTable[i][playerNameIndex]
+                local threePlusItem =  util:GetFirstUnstagedListItem(3, i)
+                if playerName and threePlusItem and not util:IsMemberListItem(string.lower(threePlusItem), string.lower(playerName)) then
+                    nag = true
+                    DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: |cff9482c9" .. playerName .. "'s|r list is active but they are not on tooltips. Restage and Commit, or redo the complete import process.")
+                end
+            end
+            if not util:IsEmptyString(ImportedTable[i][oneTwoLiveIndex]) and util:IsInputDatePassed(ImportedTable[i][oneTwoLiveIndex]) then
+                local playerName = ImportedTable[i][playerNameIndex]
+                local oneTwoItem =  util:GetFirstUnstagedListItem(1, i)
+                if playerName and oneTwoItem and not util:IsMemberListItem(string.lower(oneTwoItem), string.lower(playerName)) then
+                    nag = true
+                    DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: |cff9482c9" .. playerName .. "'s|r one/two is active but not on tooltips. Restage and Commit, or redo the complete import process.")
+                end
+            end
+        end
+        if nag then
+            DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: use the |cff9482c9of clear|r command if you don't want this nag anymore or If someone else is importing lists.")
+        end
+    end
+end
+
 OnyFansLoot.util = util

@@ -20,6 +20,7 @@ SlashCmdList["OF"] = function(msg)
         DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000stage |r: stages csv import so you can test it on tooltips before sharing it")
         DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000commit |r: commit staged changes so its shared with everyone. Assuming higher list version")
         DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000disenchant |r: One click disenchanting command. Macro this. Checks if item is enchanted as well")
+        DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000clear |r: Clears imported lists (but not tooltip lists). useful for removing nags if you are not importing lists but once did")
     elseif msg1 and msg1 == "import" then
         if util:IsAllowedToImport() then
             local instructions = "************DELETE ALL THIS TEXT BEFORE PASTING IN YOUR CSV************\n\n" ..
@@ -55,6 +56,8 @@ SlashCmdList["OF"] = function(msg)
         end
     elseif msg1 and msg1 == 'disenchant' then
         DisenchantCommand()
+    elseif msg1 and msg1 == 'clear' then
+        ImportedTable = {}
     end
 end 
 
