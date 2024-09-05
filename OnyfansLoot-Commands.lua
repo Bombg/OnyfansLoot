@@ -21,6 +21,7 @@ SlashCmdList["OF"] = function(msg)
         DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000commit |r: commit staged changes so its shared with everyone. Assuming higher list version")
         DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000disenchant |r: One click disenchanting command. Macro this. Checks if item is enchanted as well")
         DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000clear |r: Clears imported lists (but not tooltip lists). useful for removing nags if you are not importing lists but once did")
+        DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000autoinv |r: Periodically auto invites people from guild that also have a list into the raid group")
     elseif msg1 and msg1 == "import" then
         if util:IsAllowedToImport() then
             local instructions = "************DELETE ALL THIS TEXT BEFORE PASTING IN YOUR CSV************\n\n" ..
@@ -58,6 +59,15 @@ SlashCmdList["OF"] = function(msg)
         DisenchantCommand()
     elseif msg1 and msg1 == 'clear' then
         ImportedTable = {}
+    elseif msg1 and msg1 == "autoinv" then
+        if not OnyFansLoot.raidInvite then
+            OnyFansLoot.raidInvite = true
+            DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: Auto Raid Inviting guild members with lists has been turned |cff9482c9on|r")
+        else
+            OnyFansLoot.raidInvite = false
+            OnyFansLoot.invitedList = {}
+            DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: Auto Raid Inviting guild members with lists has been turned |cff9482c9off|r")
+        end
     end
 end 
 

@@ -503,12 +503,12 @@ function util:lineFromCSV(s)
     return t
 end
 
-function Dump(o)
+function util:Dump(o)
     if type(o) == 'table' then
         local s = '{ '
         for k,v in pairs(o) do
             if type(k) ~= 'number' then k = '"'..k..'"' end
-            s = s .. '['..k..'] = ' .. Dump(v) .. ','
+            s = s .. '['..k..'] = ' .. self:Dump(v) .. ','
         end
         return s .. '} '
     else
@@ -701,6 +701,7 @@ end
 
 function util:IsOnList(playerName)
     local isOnList = false
+    if not OfLoot or not playerName then return end
     for k, v in pairs(OfLoot) do
         for key, val in pairs(v) do
             if string.lower(playerName) == string.lower(key) then
@@ -797,6 +798,59 @@ function util:CheckForMissingToolTips()
         end
         if nag then
             DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: use the |cff9482c9of clear|r command if you don't want this nag anymore or If someone else is importing lists.")
+        end
+    end
+end
+
+function util:GetRaidRoster()
+    local raidRoster
+    if util:IsInRaid() then
+        raidRoster = {}
+        for i = 1, GetNumRaidMembers() do
+            local name, rank, subgroup, level, class, fileName, zone, online, isDead, role, isML = GetRaidRosterInfo(i)
+            if name then
+                raidRoster[string.lower(name)] = 1
+            end
+        end
+    end
+    return raidRoster
+end
+
+function util:GetOnlineGuildMembers()
+    local onlineGuildMembers = {}
+    for i = 1, GetNumGuildMembers() do
+        local name, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName = GetGuildRosterInfo(i)
+        if name and online and online == 1 then
+            onlineGuildMembers[string.lower(name)] = 1
+        end
+    end
+    return onlineGuildMembers
+end
+
+function util:GetRaidInviteList()
+    local raidRoster = util:GetRaidRoster()
+    local onlineGuildRoster = util:GetOnlineGuildMembers()
+    if not onlineGuildRoster or util:IsTableEmpty(onlineGuildRoster) then return end
+    if not raidRoster then raidRoster = {} end
+    local inviteList = {}
+    for k, v in pairs(onlineGuildRoster) do
+        if raidRoster[k] == nil and util:IsOnList(k) then
+            inviteList[k] = 1
+        end
+    end
+    return inviteList
+end
+
+function util:RaidInviteListMembers()
+    local inviteList = util:GetRaidInviteList()
+    if not OnyFansLoot.invitedList then OnyFansLoot.invitedList = {} end
+    if inviteList and not util:IsTableEmpty(inviteList) then
+        for k, v in pairs(inviteList) do
+            if OnyFansLoot.invitedList[k] == nil then
+                InviteByName(k)
+                OnyFansLoot.invitedList[k] = 1
+                if GetNumPartyMembers() > 0 and not util:IsInRaid() then ConvertToRaid() end
+            end
         end
     end
 end

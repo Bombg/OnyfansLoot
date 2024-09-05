@@ -10,5 +10,8 @@ OfCheck:SetScript("OnEvent", function ()
             util:CheckForMissingToolTips()
             OnyFansLoot.lastListDateCheck = time()
         end
+        if OnyFansLoot.raidInvite then
+            util:RaidInviteListMembers()
+        end
     end
 end)
