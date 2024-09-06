@@ -401,6 +401,9 @@ function util:CleanImportedTable()
             ImportedTable[i][j] = string.trim(ImportedTable[i][j])
             ImportedTable[i][j] = string.gsub(ImportedTable[i][j],"%[","")
             ImportedTable[i][j] = string.gsub(ImportedTable[i][j],"%]","")
+            if string.lower(ImportedTable[i][j]) == 'locked' then
+                ImportedTable[i][j] = ""
+            end
         end
         if ImportedTable[i][lootStartsAt] == ImportedTable[i][lootStartsAt + 2] then
             ImportedTable[i][lootStartsAt + 2] = ""
