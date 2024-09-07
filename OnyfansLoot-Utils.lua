@@ -405,7 +405,7 @@ function util:CleanImportedTable()
                 ImportedTable[i][j] = ""
             end
         end
-        if ImportedTable[i][lootStartsAt] == ImportedTable[i][lootStartsAt + 2] then
+        if string.lower(ImportedTable[i][lootStartsAt]) == string.lower(ImportedTable[i][lootStartsAt + 2]) then
             ImportedTable[i][lootStartsAt + 2] = ""
         end
     end
@@ -568,7 +568,6 @@ end
 function util:StageImportedList()
     OnyFansLoot.isStaged = true
     StagedOfLoot = {}
-    local nameLoc = 1
     local lootStartsAt = 7
     local notHeader = 2
     local version = self:GetListVersion(OfLoot)
@@ -584,12 +583,27 @@ function util:StageImportedList()
                 end
                 local modifier = self:GetLootModifier(i,j)
                 if modifier then
-                    local playerName = string.lower(ImportedTable[i][nameLoc])
+                    local playerName = self:GetStagedPlayerName(itemName,i)
                     StagedOfLoot[itemName][playerName] = modifier
                 end
             end
         end
     end
+end
+
+function util:GetStagedPlayerName(itemName, i)
+    local numLootSlots = 10
+    local nameLoc = 1
+    local playerName = string.lower(ImportedTable[i][nameLoc])
+    if  StagedOfLoot[itemName][playerName] ~= nil then
+        for k = 2, numLootSlots do
+            playerName = playerName .. " "
+            if  StagedOfLoot[itemName][playerName] == nil then
+                break
+            end
+        end
+    end
+    return playerName
 end
 
 function util:GetLootModifier(i,j)
@@ -654,9 +668,9 @@ function util:CreateItemList(lootTable, itemName)
     local j = 1
     for k, v in pairs(lootTable[lowerName]) do
         if k ~= "version" and util:DoesTableContainKey(listArr, v + 1) then
-            listArr[v + 1] = listArr[v + 1] .. k ..  ", "
+            listArr[v + 1] = listArr[v + 1] .. string.gsub(k," ", "") ..  ", "
         else
-            listArr[v + 1] = k .. ", "
+            listArr[v + 1] = string.gsub(k," ", "") .. ", "
         end
     end
 
@@ -856,6 +870,23 @@ function util:RaidInviteListMembers()
             end
         end
     end
+end
+
+function util:Adler32(str)
+    local ModAdler = 65521
+    local a = 1
+    local b = 0
+    for i = 1, string.len(str) do
+        local c = string.sub(str, i, i)
+        a = a + string.byte(c)
+        a = math.mod(a,ModAdler)
+        b = b + a
+        b = math.mod(b,ModAdler)
+    end
+    b = bit.lshift(b,16)
+    --local hex = string.format('%x', total)
+    local total = b + a
+    return total
 end
 
 OnyFansLoot.util = util
