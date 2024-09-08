@@ -5,7 +5,7 @@ OnyFansLoot.blackList = {
     "idol of the sun","idol of war","blue qiraji resonating crystal","idol of life","idol of death","idol of rebirth",
     "idol of strife","green qiraji resonating crystal","idol of night","large brilliant shard","idol of the sage", "yellow qiraji resonating crystal",
     "fiery core", "lava core", "book: gift of the wild","elementium ore", "nexus crystal", "tome of frost ward v", "hydralick armor","grimoire: demon portal",
-    "seven of warlords", "wand of allistarj"
+    "seven of warlords", "wand of allistarj", "aegis of stormwind", "band of the hierophant", "sulfuron ingot"
 }
 
 util.IsTableEmpty = function (self,table)
@@ -405,7 +405,7 @@ function util:CleanImportedTable()
                 ImportedTable[i][j] = ""
             end
         end
-        if string.lower(ImportedTable[i][lootStartsAt]) == string.lower(ImportedTable[i][lootStartsAt + 2]) then
+        if string.lower(ImportedTable[i][lootStartsAt]) == string.lower(ImportedTable[i][lootStartsAt + 2]) then -- if -1 and 1 are the same then remove the 1. (since 1 gets upgraded to -1)
             ImportedTable[i][lootStartsAt + 2] = ""
         end
     end
