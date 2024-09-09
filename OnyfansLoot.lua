@@ -25,8 +25,12 @@ function AddLootListToToolTip(Tooltip, itemName)
     local listVersion = OnyFansLoot.util:GetListVersion(lootTable)
     if OnyFansLoot.util:DoesTableContainKey(lootTable, string.lower(itemName)) and itemName  and IsAltKeyDown() then
         CheckVersionAddLine(listVersion,Tooltip)
-        local list = OnyFansLoot.util:CreateItemList(lootTable, string.lower(itemName)) 
-        Tooltip:AddLine(OnyFansLoot.util:TitleCase(list),1,0,0)
+        local list = OnyFansLoot.util:CreateItemList(lootTable, string.lower(itemName))
+        if OnyFansLoot.util:IsEmptyString(list) then
+            Tooltip:AddLine("1: Free Roll" ,1,0,0)
+        else
+            Tooltip:AddLine(OnyFansLoot.util:TitleCase(list),1,0,0)
+        end
         Tooltip:Show()
     elseif itemName == "broken boar tusk" and IsAltKeyDown() then
         Tooltip:AddLine("1: Goblin Loot" ,1,0,0)
