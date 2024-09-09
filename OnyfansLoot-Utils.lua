@@ -8,6 +8,11 @@ OnyFansLoot.blackList = {
     "seven of warlords", "wand of allistarj", "aegis of stormwind", "band of the hierophant", "sulfuron ingot"
 }
 
+OnyFansLoot.altList = {['xiaobao']='misopaste',['mirgan']='rimgan',['ninsham']='ninjerk',['kyoden']='kyoto',['chawe']='magicfella',['xhelios']='heliosx',
+                    ['navree']='navee',['buhritoh']='hambaga',['ankho']='mouchi',['epythet']='epygon',['axh']='axz',['magumba']='notmagumba', ['epy']='epygon',["aoeemo"]="omee", ["shego"]="violace",
+                    ["misohunts"]="misopaste",["koodah"]="fathercuda", ["clothcow"]="lovebucket", ["dieyou"]="dieme", ["kabru"]="hambaga", ["needheals"]="luden", ["sneakyqueefy"]="kyoto",
+                    ["epyzoic"]="epygon", ["navii"]="navee", ["soondubu"]="misopaste", ["scratcher"]="kaiden",["soraya"] = "gloryhunter", ["seance"] = "gloryhunter",}
+
 util.IsTableEmpty = function (self,table)
     local isEmpty = true
     if type(table) == "table" then 
@@ -716,12 +721,24 @@ function util:PopulateGuildRoster()
     end
 end
 
+function GetMainName(playerName)
+    local mainName
+    if not playerName then return end
+    playerName = string.lower(playerName)
+    if OnyFansLoot.altList[playerName] ~= nil then
+        mainName = OnyFansLoot.altList[playerName]
+    end
+    return mainName
+end
+
 function util:IsOnList(playerName)
     local isOnList = false
+    local mainName = GetMainName(playerName)
     if not OfLoot or not playerName then return end
+    playerName = mainName and string.lower(mainName) or string.lower(playerName)
     for k, v in pairs(OfLoot) do
         for key, val in pairs(v) do
-            if string.lower(playerName) == string.lower(key) then
+            if playerName == string.lower(key) then
                 isOnList = true
                 break
             end
