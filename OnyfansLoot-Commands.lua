@@ -70,7 +70,7 @@ SlashCmdList["OF"] = function(msg)
             OnyFansLoot.invitedList = {}
             DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: Auto Raid Inviting guild members with lists has been turned |cff9482c9off|r")
         end
-    elseif msg1 and msg2 and msg1 == 'exclude' then
+    elseif msg1 and msg2 and msg1 == 'exclude' and util:IsAllowedToImport() then
         if util:DoesTableContainKey(OfDrops, msg2) then
             for i, v in ipairs(OfDrops[msg2]) do
                 for k, val in pairs(OfDrops[msg2][i]) do
