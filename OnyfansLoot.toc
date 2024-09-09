@@ -3,7 +3,7 @@
 ## Notes: An addons that shows whose up next for loot
 ## Author: Bombg
 ## Version: 0.3.6
-## SavedVariables: OfLoot, OfDrops, Drops, ImportedTable, StagedOfLoot
+## SavedVariables: OfLoot, OfDrops, Drops, ImportedTable, StagedOfLoot, ListExclusions
 
 # main
 Compatability.lua

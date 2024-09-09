@@ -229,6 +229,7 @@ util.AddToListDrops = function (self,itemName, raidKey, itemToPersonTable)
                 OfDrops[raidKey] = {}
             end
             table.insert(OfDrops[raidKey], itemToPersonTable)
+            self:AddToListExclusions(itemName,playerName)
         end
     end
 end
@@ -666,16 +667,68 @@ function util:IsValidInputDate(inputDate) -- mm/dd mm/d m/dd m/d
     return isValid
 end
 
+function util:GetSortedTableByValue(tab)
+    local t = {}
+    local usedKeys = {}
+    for n in pairs(tab) do
+        local min = 99999
+        local minKey
+        for k, v in pairs(tab) do
+            if v  < min and usedKeys[k] == nil then
+                min = v
+                minKey = k
+            end
+        end
+        if minKey then
+            usedKeys[minKey] = true
+            table.insert(t,minKey)
+        end
+        
+    end
+    return t
+end
+
+function util:PairsByModifier (t)
+    local a = self:GetSortedTableByValue(t)
+    local i = 0      -- iterator variable
+    local iter = function ()   -- iterator function
+        i = i + 1
+        if a[i] == nil then return nil
+        else return a[i], t[a[i]]
+        end
+    end
+    return iter
+end
+
+function util:IsNameExcluded(playerName, itemName, excludedIndexes)
+    local isExcluded = false
+    local index
+    if not ListExclusions and not playerName and not itemName and not excludedIndexes then return end
+    for i = 1 , table.getn(ListExclusions) do
+        if excludedIndexes[i] == nil and playerName == ListExclusions[i]["playerName"] and itemName == ListExclusions[i]["itemName"] then
+            isExcluded = true
+            index = i
+        end
+    end
+    return isExcluded, index
+end
+
 function util:CreateItemList(lootTable, itemName)
-    local lowerName = string.lower(itemName)
+    itemName = string.lower(itemName)
     local list = ""
     local listArr = {}
     local j = 1
-    for k, v in pairs(lootTable[lowerName]) do
-        if k ~= "version" and util:DoesTableContainKey(listArr, v + 1) then
-            listArr[v + 1] = listArr[v + 1] .. string.gsub(k," ", "") ..  ", "
-        else
-            listArr[v + 1] = string.gsub(k," ", "") .. ", "
+    local excludeIndexes = {}
+    for k, v in self:PairsByModifier(lootTable[itemName]) do
+        local playerName = string.gsub(k," ", "")
+        local isExcluded, index = self:IsNameExcluded(playerName, itemName,excludeIndexes)
+        if index then excludeIndexes[index] = true end
+        if not isExcluded then
+            if k ~= "version" and util:DoesTableContainKey(listArr, v + 1) then
+                listArr[v + 1] = listArr[v + 1] .. playerName ..  ", " -- +1 because v starts at 0
+            else
+                listArr[v + 1] = playerName .. ", "
+            end
         end
     end
 
@@ -904,6 +957,47 @@ function util:Adler32(str)
     --local hex = string.format('%x', total)
     local total = b + a
     return total
+end
+
+function util:AddToListExclusions(itemName, playerName)
+    if not itemName or not playerName then return end
+    itemName = string.lower(itemName)
+    playerName = string.lower(playerName)
+    local hours, minutes = GetGameTime()
+    local exclusionItem = {}
+    exclusionItem.serverTime = hours .. ":" .. minutes
+    exclusionItem.itemName = itemName
+    exclusionItem.playerName = playerName
+    table.insert(ListExclusions, exclusionItem)
+    if not ListExclusions.version then ListExclusions.version = 1 end
+end
+
+function util:GetExclusionInfo(exclusionList)
+    local exclusionVersion
+    local listLength
+    if not util:IsTableEmpty(exclusionList) then
+        listLength = table.getn(exclusionList)
+    end
+    if exclusionList['version'] ~= nil then
+        exclusionVersion = exclusionList['version']
+    end
+    if not listLength then listLength = 0 end
+    if not exclusionVersion then exclusionVersion = 0 end
+    return listLength, exclusionVersion
+end
+
+function util:FixExclusionList(giver, receiver, item)
+    if not giver or not receiver or not item or not ListExclusions then return end
+    giver = string.lower(giver)
+    receiver = string.lower(receiver)
+    item = string.lower(item)
+    local exclN = table.getn(ListExclusions)
+    for i = exclN, 1, -1 do
+        if ListExclusions[i]["itemName"] == item and ListExclusions[i]["playerName"] == giver then
+            ListExclusions[i]["playerName"] = receiver
+            break
+        end
+    end
 end
 
 OnyFansLoot.util = util

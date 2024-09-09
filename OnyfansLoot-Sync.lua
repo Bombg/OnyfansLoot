@@ -8,11 +8,28 @@ OnyFansLoot.listVersionBroadcastPrefix = "oflootlist"
 OnyFansLoot.listSharePrefix = "ofloot"
 OnyFansLoot.listAskPrefix = "oflootask"
 OnyFansLoot.addonVersionBroadcastPrefix = "ofversion"
+OnyFansLoot.exclusionListPrefix = "ofexclusion"
+OnyFansLoot.exclusionSharePrefix = "ofexclusionshare"
+OnyFansLoot.exlusionAskPrefix = "ofexlusionask"
 local versionRebroadcastTime = 180
 local lastAsk = 0
 local versionWarned = false
 local util = OnyFansLoot.util
 
+OnyFansLoot:RegisterComm(OnyFansLoot.exclusionSharePrefix,function (prefix, message, distribution, sender)
+    local success, data = OnyFansLoot:Deserialize(message)
+    if success  then
+        local exLength, exVersion = util:GetExclusionInfo(ListExclusions)
+        local imELenth, imEVersion = util:GetExclusionInfo(data)
+        if imEVersion > exVersion  then
+            DEFAULT_CHAT_FRAME:AddMessage(sender .. " Sent you exlustion list Version: " .. imEVersion .. " replacing list version: " .. exVersion)
+            ListExclusions =  data
+        elseif imEVersion == exVersion and imELenth > exLength then
+            DEFAULT_CHAT_FRAME:AddMessage(sender .. "upraded your current exlusion list from " .. exLength .. " to " .. imELenth .. " items")
+            ListExclusions =  data
+        end
+    end
+end)
 
 
 OnyFansLoot:RegisterComm(OnyFansLoot.listSharePrefix,function (prefix, message, distribution, sender)
@@ -37,6 +54,16 @@ function SendLootList(sharee)
     OnyFansLoot:SendCommMessage(prefix, text, destination, target)
 end
 
+function SendExlusionList(sharee)
+    local prio = "BULK"
+    local prefix = OnyFansLoot.exclusionSharePrefix
+    local text = OnyFansLoot:Serialize(ListExclusions)
+    local target = nil
+    DEFAULT_CHAT_FRAME:AddMessage("Sharing exclusion list with " .. sharee)
+    local destination ="GUILD" --"PARTY", "RAID", "GUILD", "BATTLEGROUND"
+    OnyFansLoot:SendCommMessage(prefix, text, destination, target)
+end
+
 OfSync:RegisterEvent("GUILD_ROSTER_UPDATE")
 OfSync:RegisterEvent("CHAT_MSG_ADDON")
 OfSync:SetScript("OnEvent", function ()
@@ -44,8 +71,10 @@ OfSync:SetScript("OnEvent", function ()
         OnyFansLoot.lastBroadcast = time()
         local listVersion = util:GetListVersion(OfLoot)
         local addonVersion = util:GetLocalAddonVersion()
+        local exLength, exVersion = util:GetExclusionInfo(ListExclusions)
         SendAddonMessage(OnyFansLoot.listVersionBroadcastPrefix, "LIST_VERSION:" .. listVersion, "GUILD")
         SendAddonMessage(OnyFansLoot.addonVersionBroadcastPrefix, "VERSION:" .. addonVersion, "GUILD")
+        ChatThrottleLib:SendAddonMessage("NORMAL",OnyFansLoot.exclusionListPrefix,"EXCLUSION:" .. exLength .. ":" .. exVersion,"GUILD")
     elseif event == "CHAT_MSG_ADDON" then
         local prefix = arg1
         local message = arg2
@@ -98,6 +127,19 @@ OfSync:SetScript("OnEvent", function ()
                 if itemName and util:IsPlayerListItem(string.lower(itemName))  then
                     DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: " .. itemLink .. " Dropped. It's on your list")
                 end
+            end
+        elseif message and prefix and sender and prefix == OnyFansLoot.exclusionListPrefix then
+            local _,imELenth, imEVersion = util:StrSplit(":",message)
+            local exLength, exVersion = util:GetExclusionInfo(ListExclusions)
+            imELenth = tonumber(imELenth)
+            imEVersion = tonumber(imEVersion)
+            if imEVersion > exVersion or imEVersion == exVersion and imELenth > exLength then
+                ChatThrottleLib:SendAddonMessage("NORMAL",OnyFansLoot.exlusionAskPrefix,"ASK:" .. sender,"GUILD")
+            end
+        elseif message and prefix and sender and prefix == OnyFansLoot.exlusionAskPrefix and util:IsOnList(string.lower(sender)) then
+            local _, requestFrom = util:StrSplit(":",message)
+            if OnyFansLoot.playerName == requestFrom then
+                SendExlusionList(sender)
             end
         end
     end

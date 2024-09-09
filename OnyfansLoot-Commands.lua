@@ -22,6 +22,8 @@ SlashCmdList["OF"] = function(msg)
         DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000disenchant |r: One click disenchanting command. Macro this. Checks if item is enchanted as well")
         DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000clear |r: Clears imported lists (but not tooltip lists). useful for removing nags if you are not importing lists but once did")
         DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000autoinv |r: Periodically auto invites people from guild that also have a list into the raid group")
+        DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000exclude |r |cff9482c9key|r: Adds items from list drops to exclusion list where key is a key from -of export help-")
+        DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000exclude |r |cff9482c9clear|r: Clears the current exlusion list and bumps the version up one. Use this if you are starting a brand new list")
     elseif msg1 and msg1 == "import" then
         if util:IsAllowedToImport() then
             local instructions = "************DELETE ALL THIS TEXT BEFORE PASTING IN YOUR CSV************\n\n" ..
@@ -68,6 +70,23 @@ SlashCmdList["OF"] = function(msg)
             OnyFansLoot.invitedList = {}
             DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: Auto Raid Inviting guild members with lists has been turned |cff9482c9off|r")
         end
+    elseif msg1 and msg2 and msg1 == 'exclude' then
+        if util:DoesTableContainKey(OfDrops, msg2) then
+            for i, v in ipairs(OfDrops[msg2]) do
+                for k, val in pairs(OfDrops[msg2][i]) do
+                    util:AddToListExclusions(k, val)
+                end
+            end
+            DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: Added all the list drops from raid: |cff9482c9" .. msg2 .. "|r to exclusion list")
+        elseif msg2 == 'clear' then
+            local exLength, exVersion = util:GetExclusionInfo(ListExclusions)
+            ListExclusions = {}
+            DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: Exlusion list " .. exVersion .. " has been cleared. New exlusion list version is now |cff9482c9" .. exVersion + 1 ..  "|r")
+            ListExclusions.version = exVersion + 1
+        else
+            DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: This raid key does not exist. Find one with the |cff9482c9'of export help'|r command")
+        end
+
     end
 end 
 

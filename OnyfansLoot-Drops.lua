@@ -71,6 +71,7 @@ function HandleItemTransition(giver, receiver, item, raidKey)
         end
         if hasDropsList then
             Drops[raidKey][dropsListIndex][item] = receiver
+            util:FixExclusionList(giver, receiver, item)
         end
     end
     return hasListDropped, hasDropsList
