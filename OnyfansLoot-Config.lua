@@ -1,6 +1,6 @@
 OnyFansLoot = AceLibrary("AceAddon-2.0"):new("AceHook-2.1")
 OnyFansLoot.playerName = UnitName("player")
-OnyFansLoot.minRarityForAnnouncement = 0 -- Min rarity loot needs to be before it will be announced in raid chat by loot master
+OnyFansLoot.minRarityForAnnouncement = 4 -- Min rarity loot needs to be before it will be announced in raid chat by loot master
 OnyFansLoot.minRarityToGroupWith = OnyFansLoot.minRarityForAnnouncement - 1 -- If there's loot on a unit under minRarityForAnnouncement, but still want to announce it (and not on blacklist) useful for recipes
 OnyFansLoot.minQualityToLogLoot = 3 -- For loot logging for the /of export command
 OnyFansLoot.lastLootmsgCleanTime = 3 --  Anything => lastLootMsgCleanTime is removed from lastLootmsgTab
