@@ -67,10 +67,10 @@ util.GetGuildRank = function (self,playerUnitId)
     return guildRank
 end
 
-util.IsAllowedToImport = function (self) --  1  = GM, 2 = Twitch Mod, 3 = Foot Model, 4 = Tier 2
+util.IsAllowedToImport = function (self)
     local allowed = false
-    for i = 1,2 do
-        if self:GetGuildRank("player") == GuildControlGetRankName(i) then
+    for i,v in ipairs(OnyFansLoot.allowedGuildRanks) do
+        if self:GetGuildRank("player") == GuildControlGetRankName(v) then
             allowed = true
             break
         end

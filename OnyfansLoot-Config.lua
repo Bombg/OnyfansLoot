@@ -8,6 +8,7 @@ OnyFansLoot.timeBetweenListDateChecks = 3600 -- For checking if someone's 1/2 or
 OnyFansLoot.lastListDateCheck = time() - OnyFansLoot.timeBetweenListDateChecks + 15 -- Creating a short delay before the list check notification, so it's not lost on log in
 OnyFansLoot.versionRebroadcastTime = 180 -- Time in seconds between broadcasting version number
 OnyFansLoot.timeBetweenLootBroadcast = 180 -- Time in seconds before loot master will send a raid message of the loot drops off the same unit name
+OnyFansLoot.allowedGuildRanks = {1,2} -- Index of the allowed ranks to import, --  1  = GM, 2 = Twitch Mod, 3 = Foot Model, 4 = Tier 2
 
 -- Prefixes for addon messages
 OnyFansLoot.itemDropPrefix  = "ofitem" -- used for broadcasting item drops to people outside of range to recieve the notice in chat
