@@ -5,7 +5,6 @@ OfLootDrops:RegisterEvent("CHAT_MSG_LOOT")
 OfLootDrops:RegisterEvent("CHAT_MSG_SYSTEM")
 OfLootDrops:SetScript("OnEvent", function ()
     local chatMsg = arg1
-    local lineId = arg2 -- If this is unique across clients I can probably use this to my advantage
     if util:IsInRaid() and event == "CHAT_MSG_LOOT" then
         local regex = "(%a-) receive"
         if string.find(chatMsg, regex) then
