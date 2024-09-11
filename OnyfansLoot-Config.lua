@@ -1,11 +1,13 @@
+OnyFansLoot = AceLibrary("AceAddon-2.0"):new("AceHook-2.1")
+OnyFansLoot.playerName = UnitName("player")
+OnyFansLoot.minRarityForAnnouncement = 0 -- Min rarity loot needs to be before it will be announced in raid chat by loot master
+OnyFansLoot.minRarityToGroupWith = OnyFansLoot.minRarityForAnnouncement - 1 -- If there's loot on a unit under minRarityForAnnouncement, but still want to announce it (and not on blacklist) useful for recipes
 OnyFansLoot.minQualityToLogLoot = 3 -- For loot logging for the /of export command
 OnyFansLoot.lastLootmsgCleanTime = 3 --  Anything => lastLootMsgCleanTime is removed from lastLootmsgTab
 OnyFansLoot.timeBetweenListDateChecks = 3600 -- For checking if someone's 1/2 or whole list is active but they are not showing on tooltips
 OnyFansLoot.lastListDateCheck = time() - OnyFansLoot.timeBetweenListDateChecks + 15 -- Creating a short delay before the list check notification, so it's not lost on log in
 OnyFansLoot.versionRebroadcastTime = 180 -- Time in seconds between broadcasting version number
 OnyFansLoot.timeBetweenLootBroadcast = 180 -- Time in seconds before loot master will send a raid message of the loot drops off the same unit name
-OnyFansLoot.minRarityForAnnouncement = 4 -- Min rarity loot needs to be before it will be announced in raid chat by loot master
-OnyFansLoot.minRarityToGroupWith = OnyFansLoot.minRarityForAnnouncement - 1 -- If there's loot on a unit under minRarityForAnnouncement, but still want to announce it (and not on blacklist) useful for recipes
 
 -- Prefixes for addon messages
 OnyFansLoot.itemDropPrefix  = "ofitem" -- used for broadcasting item drops to people outside of range to recieve the notice in chat

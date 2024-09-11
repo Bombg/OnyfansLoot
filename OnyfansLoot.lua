@@ -1,5 +1,3 @@
-OnyFansLoot = AceLibrary("AceAddon-2.0"):new("AceHook-2.1")
-OnyFansLoot.playerName = UnitName("player")
 local util = OnyFansLoot.util
 
 
