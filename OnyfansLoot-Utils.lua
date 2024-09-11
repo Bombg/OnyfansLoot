@@ -1,17 +1,5 @@
 if OnyFansLoot.util then return end
-OnyFansLoot.minQualityToLogLoot = 3
 local util = {}
-OnyFansLoot.blackList = {
-    "idol of the sun","idol of war","blue qiraji resonating crystal","idol of life","idol of death","idol of rebirth",
-    "idol of strife","green qiraji resonating crystal","idol of night","large brilliant shard","idol of the sage", "yellow qiraji resonating crystal",
-    "fiery core", "lava core", "book: gift of the wild","elementium ore", "nexus crystal", "tome of frost ward v", "hydralick armor","grimoire: demon portal",
-    "seven of warlords", "wand of allistarj", "aegis of stormwind", "band of the hierophant", "sulfuron ingot"
-}
-
-OnyFansLoot.altList = {['xiaobao']='misopaste',['mirgan']='rimgan',['ninsham']='ninjerk',['kyoden']='kyoto',['chawe']='magicfella',['xhelios']='heliosx',
-                    ['navree']='navee',['buhritoh']='hambaga',['ankho']='mouchi',['epythet']='epygon',['axh']='axz',['magumba']='notmagumba', ['epy']='epygon',["aoeemo"]="omee", ["shego"]="violace",
-                    ["misohunts"]="misopaste",["koodah"]="fathercuda", ["clothcow"]="lovebucket", ["dieyou"]="dieme", ["kabru"]="hambaga", ["needheals"]="luden", ["sneakyqueefy"]="kyoto",
-                    ["epyzoic"]="epygon", ["navii"]="navee", ["soondubu"]="misopaste", ["scratcher"]="kaiden",["soraya"] = "gloryhunter", ["seance"] = "gloryhunter",}
 
 util.IsTableEmpty = function (self,table)
     local isEmpty = true
@@ -996,6 +984,14 @@ function util:FixExclusionList(giver, receiver, item)
         if ListExclusions[i]["itemName"] == item and ListExclusions[i]["playerName"] == giver then
             ListExclusions[i]["playerName"] = receiver
             break
+        end
+    end
+end
+
+function util:CleanLastLootMsgTab()
+    for k, v in pairs(OnyFansLoot.lastLootmsgTab) do
+        if GetTime() - v >= OnyFansLoot.lastLootmsgCleanTime then
+            OnyFansLoot.lastLootmsgTab[k] = nil
         end
     end
 end

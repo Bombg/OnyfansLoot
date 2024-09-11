@@ -3,18 +3,10 @@ local AceComm = LibStub:GetLibrary("AceComm-3.0")
 local AceSerializer = LibStub:GetLibrary("AceSerializer-3.0")
 AceComm:Embed(OnyFansLoot)
 AceSerializer:Embed(OnyFansLoot)
-OnyFansLoot.lastBroadcast = 0
-OnyFansLoot.listVersionBroadcastPrefix = "oflootlist"
-OnyFansLoot.listSharePrefix = "ofloot"
-OnyFansLoot.listAskPrefix = "oflootask"
-OnyFansLoot.addonVersionBroadcastPrefix = "ofversion"
-OnyFansLoot.exclusionListPrefix = "ofexclusion"
-OnyFansLoot.exclusionSharePrefix = "ofexclusionshare"
-OnyFansLoot.exlusionAskPrefix = "ofexlusionask"
-local versionRebroadcastTime = 180
 local lastAsk = 0
 local versionWarned = false
 local util = OnyFansLoot.util
+local lastBroadcast = 0
 
 OnyFansLoot:RegisterComm(OnyFansLoot.exclusionSharePrefix,function (prefix, message, distribution, sender)
     local success, data = OnyFansLoot:Deserialize(message)
@@ -67,8 +59,8 @@ end
 OfSync:RegisterEvent("GUILD_ROSTER_UPDATE")
 OfSync:RegisterEvent("CHAT_MSG_ADDON")
 OfSync:SetScript("OnEvent", function ()
-    if event == "GUILD_ROSTER_UPDATE"  and (time() - OnyFansLoot.lastBroadcast) > versionRebroadcastTime then
-        OnyFansLoot.lastBroadcast = time()
+    if event == "GUILD_ROSTER_UPDATE"  and (time() - lastBroadcast) > OnyFansLoot.versionRebroadcastTime then
+        lastBroadcast = time()
         local listVersion = util:GetListVersion(OfLoot)
         local addonVersion = util:GetLocalAddonVersion()
         local exLength, exVersion = util:GetExclusionInfo(ListExclusions)
@@ -84,7 +76,7 @@ OfSync:SetScript("OnEvent", function ()
         local addonVersion = util:GetLocalAddonVersion()
         if prefix and prefix == OnyFansLoot.listVersionBroadcastPrefix then
             local _,broadcastedListVersion = util:StrSplit(":",message)
-            if tonumber(broadcastedListVersion) > localListVersion and (time() - lastAsk) > versionRebroadcastTime then
+            if tonumber(broadcastedListVersion) > localListVersion and (time() - lastAsk) > OnyFansLoot.versionRebroadcastTime then
                 lastAsk = time()
                 SendAddonMessage(OnyFansLoot.listAskPrefix, "ASK:" .. broadcastedListVersion .. ":" .. sender, "GUILD")
             end
@@ -99,14 +91,16 @@ OfSync:SetScript("OnEvent", function ()
                 DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000[OnyFansLoot]|r New version available! Check OnyFans Discord")
                 versionWarned = true
             end
-        elseif prefix and prefix == OnyFansLoot.itemDropPrefix and OnyFansLoot.lastLootmsg ~= message and util:IsInRaid() then
+        elseif prefix and prefix == OnyFansLoot.itemDropPrefix and util:IsInRaid() then
+            util:CleanLastLootMsgTab()
+            if OnyFansLoot.lastLootmsgTab[message] ~= nil then return end
             local _,playerName,itemId, raidKey = util:StrSplit(":",message)
             if playerName and itemId and raidKey and raidKey == util:GetRaidKey() then
                 local itemName, _, quality, level, class, subclass, max_stack, slot, texture = GetItemInfo(itemId)
                 if itemName and quality then
                     local itemToPersonTable  = {}
                     DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000[OnyFansLoot]|r " .. playerName .. " received " .. itemName)
-                    OnyFansLoot.lastLootmsg = message
+                    OnyFansLoot.lastLootmsgTab[message] = GetTime()
                     itemToPersonTable[itemName] = string.lower(playerName)
                     util:AddToListDrops(itemName, raidKey, itemToPersonTable)
                     util:AddToDrops(raidKey, itemToPersonTable, quality)

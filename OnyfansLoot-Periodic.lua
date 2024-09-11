@@ -1,7 +1,5 @@
 local util = OnyFansLoot.util
 local OfCheck = CreateFrame("Frame")
-OnyFansLoot.timeBetweenListDateChecks = 3600
-OnyFansLoot.lastListDateCheck = time() - OnyFansLoot.timeBetweenListDateChecks + 15
 
 OfCheck:RegisterEvent("GUILD_ROSTER_UPDATE")
 OfCheck:SetScript("OnEvent", function ()

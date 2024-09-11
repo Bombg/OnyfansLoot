@@ -1,7 +1,5 @@
 local OfLootDrops = CreateFrame("Frame")
 local util = OnyFansLoot.util
-OnyFansLoot.itemDropPrefix  = "ofitem"
-OnyFansLoot.itemCorrectionPrefix = "ofitemcorrection"
 
 OfLootDrops:RegisterEvent("CHAT_MSG_LOOT")
 OfLootDrops:RegisterEvent("CHAT_MSG_SYSTEM")
@@ -24,7 +22,9 @@ OfLootDrops:SetScript("OnEvent", function ()
                     util:AddToListDrops(itemName, raidKey, itemToPersonTable)
                     util:AddToDrops(raidKey, itemToPersonTable, quality)
                     if quality and quality >= OnyFansLoot.minQualityToLogLoot then
+                        util:CleanLastLootMsgTab()
                         OnyFansLoot.lastLootmsg =  "ITEM:" .. playerName .. ":" .. itemId .. ":" .. raidKey
+                        OnyFansLoot.lastLootmsgTab[OnyFansLoot.lastLootmsg] = GetTime()
                         SendAddonMessage(OnyFansLoot.itemDropPrefix, OnyFansLoot.lastLootmsg, "GUILD")
                     end
                 elseif util:IsDisenchantedRaidItem(itemName,chatMsg) then
