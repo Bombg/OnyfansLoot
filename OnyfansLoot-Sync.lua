@@ -118,11 +118,9 @@ end
 
 function sync:NotifyListDrop(message)
     local itemLink = message
-    if itemLink then
-        local hexColor, itemString, itemName = util:GetItemLinkParts(itemLink)
-        if itemName and util:IsPlayerListItem(string.lower(itemName))  then
-            DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: " .. itemLink .. " Dropped. It's on your list")
-        end
+    local hexColor, itemString, itemName = util:GetItemLinkParts(itemLink)
+    if itemName and util:IsPlayerListItem(string.lower(itemName))  then
+        DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: " .. itemLink .. " Dropped. It's on your list")
     end
 end
 
