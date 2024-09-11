@@ -25,7 +25,7 @@ OfLootDrops:SetScript("OnEvent", function ()
                         util:CleanLastLootMsgTab()
                         OnyFansLoot.lastLootmsg =  "ITEM:" .. playerName .. ":" .. itemId .. ":" .. raidKey
                         OnyFansLoot.lastLootmsgTab[OnyFansLoot.lastLootmsg] = GetTime()
-                        SendAddonMessage(OnyFansLoot.itemDropPrefix, OnyFansLoot.lastLootmsg, "GUILD")
+                        ChatThrottleLib:SendAddonMessage("NORMAL",OnyFansLoot.itemDropPrefix, OnyFansLoot.lastLootmsg, "GUILD")
                     end
                 elseif util:IsDisenchantedRaidItem(itemName,chatMsg) then
                     if OnyFansLoot.lastDisenchantedItem then
@@ -36,7 +36,7 @@ OfLootDrops:SetScript("OnEvent", function ()
                             local listDrop, itemDrop = HandleItemTransition(string.lower(OnyFansLoot.playerName), receiver,itemNameFromLink,util:GetRaidKey())
                             if listDrop or itemDrop then
                                 local itemCorrectionMessage = string.lower(OnyFansLoot.playerName) .. ":" .. receiver .. ":" .. itemNameFromLink
-                                SendAddonMessage(OnyFansLoot.itemCorrectionPrefix, itemCorrectionMessage, "GUILD")
+                                ChatThrottleLib:SendAddonMessage("NORMAL",OnyFansLoot.itemCorrectionPrefix, itemCorrectionMessage, "GUILD")
                             end
                         end
                     end

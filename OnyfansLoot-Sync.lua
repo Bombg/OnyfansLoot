@@ -64,8 +64,8 @@ OfSync:SetScript("OnEvent", function ()
         local listVersion = util:GetListVersion(OfLoot)
         local addonVersion = util:GetLocalAddonVersion()
         local exLength, exVersion = util:GetExclusionInfo(ListExclusions)
-        SendAddonMessage(OnyFansLoot.listVersionBroadcastPrefix, "LIST_VERSION:" .. listVersion, "GUILD")
-        SendAddonMessage(OnyFansLoot.addonVersionBroadcastPrefix, "VERSION:" .. addonVersion, "GUILD")
+        ChatThrottleLib:SendAddonMessage("NORMAL",OnyFansLoot.listVersionBroadcastPrefix, "LIST_VERSION:" .. listVersion, "GUILD")
+        ChatThrottleLib:SendAddonMessage("NORMAL",OnyFansLoot.addonVersionBroadcastPrefix, "VERSION:" .. addonVersion, "GUILD")
         ChatThrottleLib:SendAddonMessage("NORMAL",OnyFansLoot.exclusionListPrefix,"EXCLUSION:" .. exLength .. ":" .. exVersion,"GUILD")
     elseif event == "CHAT_MSG_ADDON" then
         local prefix = arg1
@@ -78,7 +78,7 @@ OfSync:SetScript("OnEvent", function ()
             local _,broadcastedListVersion = util:StrSplit(":",message)
             if tonumber(broadcastedListVersion) > localListVersion and (time() - lastAsk) > OnyFansLoot.versionRebroadcastTime then
                 lastAsk = time()
-                SendAddonMessage(OnyFansLoot.listAskPrefix, "ASK:" .. broadcastedListVersion .. ":" .. sender, "GUILD")
+                ChatThrottleLib:SendAddonMessage("NORMAL",OnyFansLoot.listAskPrefix, "ASK:" .. broadcastedListVersion .. ":" .. sender, "GUILD")
             end
         elseif prefix and sender and prefix == OnyFansLoot.listAskPrefix and util:IsOnList(string.lower(sender)) then
             local _,askVersion, requestFrom = util:StrSplit(":",message)
