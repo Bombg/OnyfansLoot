@@ -17,7 +17,7 @@ The loot list addon for OnyFans
     - Automatically broadcasts boss loot drops if looted by a master looter
     - Pre-made blacklist of items so nonsense items aren't broadcasted
 - Loot tracking features
-    - Broadcasts loot drops to other OnyFansLoot users who are out of range to recieve "so and so recieves xxxx" messages
+    - Broadcasts loot drops to other OnyFansLoot users who are out of range to receive "so and so receives xxxx" messages
     - Keeps track of dropped items that are on any players list and who got that item
     - Keeps track of all raid drops
     - If disenchanter has the addon, also keeps track of loot that is disenchanted

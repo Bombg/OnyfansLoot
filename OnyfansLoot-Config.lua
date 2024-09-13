@@ -11,8 +11,8 @@ OnyFansLoot.timeBetweenLootBroadcast = 180 -- Time in seconds before loot master
 OnyFansLoot.allowedGuildRanks = {1,2} -- Index of the allowed ranks to import, --  1  = GM, 2 = Twitch Mod, 3 = Foot Model, 4 = Tier 2
 
 -- Prefixes for addon messages
-OnyFansLoot.itemDropPrefix  = "ofitem" -- used for broadcasting item drops to people outside of range to recieve the notice in chat
-OnyFansLoot.itemCorrectionPrefix = "ofitemcorrection" -- used show raid item trades if out of range or if you didn't recieve the message for some reason
+OnyFansLoot.itemDropPrefix  = "ofitem" -- used for broadcasting item drops to people outside of range to receive the notice in chat
+OnyFansLoot.itemCorrectionPrefix = "ofitemcorrection" -- used show raid item trades if out of range or if you didn't receive the message for some reason
 OnyFansLoot.listVersionBroadcastPrefix = "oflootlist" -- brodcasting loot version
 OnyFansLoot.listSharePrefix = "ofloot" -- used when sending list to another person
 OnyFansLoot.listAskPrefix = "oflootask" -- used when asking for a speicific list from speicific person
