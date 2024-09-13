@@ -28,8 +28,8 @@ SlashCmdList["OF"] = function(msg)
         if util:IsAllowedToImport() then
             local instructions = "************DELETE ALL THIS TEXT BEFORE PASTING IN YOUR CSV************\n\n" ..
                         "******************INSTRUCTIONS******************\n" ..
-                        "DELETE ALL ITEMS WITH STRIKETHROUGH IN SOURCE LIST\n".. 
-                        "STRIKETHROUGH IS NOT IMPORTED INTO CSV SO ANY IMPORT CANNOT TELL THE DIFFERENCE\n" ..
+                        "DELETE ALL ITEMS WITH STRIKETHROUGH IN SOURCE LIST OR HAVE AN AN EXLUSION LIST\n".. 
+                        "STRIKETHROUGH IS NOT IMPORTED INTO CSV SO ANY IMPORT CANNOT TELL THE DIFFERENCE UNLESS YOU HAVE AN EXLUSION LIST\n" ..
                         "IF A LIST ITEM IS MISSPELLED IT WILL NOT WORK\n\n"..
                         "THE LIST WILL BE CROSSED CHECKED WITH ATLASLOOT FOR MISSPELLINGS\n\n" .. 
                         "************DELETE ALL THIS TEXT BEFORE PASTING IN YOUR CSV************\n\n"

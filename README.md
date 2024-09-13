@@ -19,10 +19,11 @@ The loot list addon for OnyFans
 - Loot tracking features
     - Broadcasts loot drops to other OnyFansLoot users who are out of range to receive "so and so receives xxxx" messages
     - Keeps track of dropped items that are on any players list and who got that item
+        - These items are added to an exlusion list
     - Keeps track of all raid drops
-    - If disenchanter has the addon, also keeps track of loot that is disenchanted
+    - If disenchanter has the addon, also keeps track of loot that is disenchanted (if they use the command)
     - Export these with the '/of export' or '/of export help' command
-- Syncs the list with other raid members who are also on the loot list and have active lists
+- Syncs the loot list and exlusion list with other raid members who are also on the loot list and have active lists
 
 ## Screenshots & Gifs
 - Holding Alt over an inventory item
@@ -56,9 +57,8 @@ The loot list addon for OnyFans
 
 ## Limitations
 - If any of the items in the loot list or master loot list are misspelled this won't work
-- For now, this does not update the list when people get items from their list 
-    - List updates are sent out by whomever imports the list from csv but you need to be on a list to get sent it
-- Before importing from CSV, all items with strikethrough need to be deleted. Unfortunately strikethough cannot be put into a CSV.
+- List updates are sent out by whomever imports the list from csv but you need to be on a list to get sent it
+- Before importing from CSV, all items with strikethrough need to be deleted OR you need to have a populated exlusion list with all strikethrough items on it
 
 ## Commands
 - Every command starts with /of or /onyfansloot. The examples will be using /of but /onyfansloot will work too.
@@ -78,11 +78,16 @@ The loot list addon for OnyFans
     - disenchant with only 1 press, if you macro the command.
     - disenchanter is shown in chat what they are disenchanting
     - has enchanted item protection, must press the button 3 times to disenchant an enchanted item
+- /of autoinv - Periodically auto invites people from guild that also have a list into the raid group
+- /of exclude key - Adds items from list drops to exclusion list where key is a key from /of export help
+- /of exclude clear - Clears the current exlusion list and bumps the version up one. Use this if you are starting a brand new list
+- /of clear - Clears imported lists (but not tooltip lists). useful for removing nags if you are not importing lists but once did"
 
 ## How to Import From CSV
 **** IT IS HIGHLY RECOMMENDED YOU HAVE [AtlasLoot](https://github.com/Lexiebean/AtlasLoot/) INSTALLED ****
 
 *** YOU MUST BE OFFICER OR GM IN ORDER TO IMPORT ****
+0. Steps 1-3 are optional if you are starting with a populated exlusion list - use exclude commands to populate it, if you have list drops logged
 1. Go to the lootlist Google spreadsheet hit ctrl+a to highlight everything and ctrl+c to copy everything
 2. Paste a copy of the sheet in a completely new Google spreadsheet somewhere else. This is so you can modify it
 3. Delete any item cell that has strikethrough. Strikethrough is lost when converting to CSV, so get rid of any cell with it now
