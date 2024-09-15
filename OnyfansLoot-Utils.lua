@@ -996,4 +996,15 @@ function util:CleanLastLootMsgTab()
     end
 end
 
+function util:GetNumOfExlusions(itemName)
+    itemName = string.lower(itemName)
+    local count = 0
+    for n, v in ipairs(ListExclusions) do
+        if itemName == string.lower(v["itemName"]) then
+            count = count + 1
+        end
+    end
+    return count
+end
+
 OnyFansLoot.util = util

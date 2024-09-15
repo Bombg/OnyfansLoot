@@ -22,7 +22,7 @@ function AddLootListToToolTip(Tooltip, itemName)
     local lootTable = OnyFansLoot.isStaged and StagedOfLoot or OfLoot
     local listVersion = OnyFansLoot.util:GetListVersion(lootTable)
     if OnyFansLoot.util:DoesTableContainKey(lootTable, string.lower(itemName)) and itemName  and IsAltKeyDown() then
-        CheckVersionAddLine(listVersion,Tooltip)
+        CheckVersionAddLine(listVersion,Tooltip, itemName)
         local list = OnyFansLoot.util:CreateItemList(lootTable, string.lower(itemName))
         if OnyFansLoot.util:IsEmptyString(list) then
             Tooltip:AddLine("1: Free Roll" ,1,0,0)
@@ -34,18 +34,26 @@ function AddLootListToToolTip(Tooltip, itemName)
         Tooltip:AddLine("1: Goblin Loot" ,1,0,0)
         Tooltip:Show()
     elseif IsAltKeyDown() then
-        CheckVersionAddLine(listVersion,Tooltip)
+        CheckVersionAddLine(listVersion,Tooltip, itemName)
         Tooltip:AddLine("1: Free Roll" ,1,0,0)
         Tooltip:Show()
     end
 end
 
-function CheckVersionAddLine(listVersion, Tooltip)
+function CheckVersionAddLine(listVersion, Tooltip, itemName)
+    local numExlusions = OnyFansLoot.util:GetNumOfExlusions(itemName)
     if OnyFansLoot.isStaged then
         Tooltip:AddLine("Staged: Uncommited changes",1,0,0)
     end
+    local listTitle  = "|cffFF0000List#|r"
+    local dateTitle = "|cffFF0000#Date#|r"
+    local excludingTitle = "|cffFF0000#Excluding#|r"
+    local namesFoot = "|cffFF0000#Names|r"
+    local pListVersion = "|cff9482c9" .. listVersion .. "|r"
+    local pDate = "|cff9482c9" .. OfLoot["version"][2] .. "|r"
+    local pNumExclusions = "|cff9482c9" .. numExlusions .. "|r"
     if listVersion > 0 then
-        Tooltip:AddLine("List#" ..listVersion ..":" .. OfLoot["version"][2],1,0,0) 
+        Tooltip:AddLine(listTitle ..pListVersion ..dateTitle .. pDate .. excludingTitle .. pNumExclusions .. namesFoot) 
     else
         Tooltip:AddLine("No List Installed",1,0,0)
     end
