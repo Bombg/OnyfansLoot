@@ -89,7 +89,11 @@ The loot list addon for OnyFans
 
 *** YOU MUST BE OFFICER OR GM IN ORDER TO IMPORT ****
 
-0. Steps 1-3 are optional if you are starting with a populated exlusion list - use exclude commands to populate it, if you have list drops logged. Use '/of exclude show' to check
+0. Steps 1-3 are optional if you are starting with a populated exlusion list
+    - use '/of exclude show' command to check
+    - if exclude list is empty, but you have logged item drops you want to add to it
+        - use '/of exclude key' to add items to exclusion list. Where key is a key from '/of export key'
+    - list items are automatically added to the exclusion list when handed out during raid
 1. Go to the lootlist Google spreadsheet hit ctrl+a to highlight everything and ctrl+c to copy everything
 2. Paste a copy of the sheet in a completely new Google spreadsheet somewhere else. This is so you can modify it
 3. Delete any item cell that has strikethrough. Strikethrough is lost when converting to CSV, so get rid of any cell with it now
