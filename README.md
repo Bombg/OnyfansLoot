@@ -92,7 +92,7 @@ The loot list addon for OnyFans
 0. Steps 1-3 are optional if you are starting with a populated exlusion list
     - use '/of exclude show' command to check
     - if exclude list is empty, but you have logged item drops you want to add to it
-        - use '/of exclude key' to add items to exclusion list. Where key is a key from '/of export key'
+        - use '/of exclude key' to add items to exclusion list. Where key is a key from '/of export help'
     - list items are automatically added to the exclusion list when handed out during raid
 1. Go to the lootlist Google spreadsheet hit ctrl+a to highlight everything and ctrl+c to copy everything
 2. Paste a copy of the sheet in a completely new Google spreadsheet somewhere else. This is so you can modify it
@@ -108,6 +108,3 @@ The loot list addon for OnyFans
 12. The stage command will reset if you reload the game or UI. It just previews the changes to tooltips. 
 13. If everything is as you hoped/excepted you can make this list official and share it by using the '/of commit' command
 14. Congrats you have now imported your list! It will be shared to other guildmates after a few minutes.
-
-
-
