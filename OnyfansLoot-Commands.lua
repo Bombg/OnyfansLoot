@@ -170,6 +170,7 @@ function HandleDisenchantGlobal(itemLink)
 end
 
 function PrintExcludeList()
+    DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000Exclusion List Items:|r ")
     for n, v in ipairs(ListExclusions) do
         local itemPlayerString = util:TitleCase(v["playerName"]) .. ": " .. util:TitleCase(v["itemName"])
         DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000Item:|r |cff9482c9".. n ..  "|r: " .. itemPlayerString)
