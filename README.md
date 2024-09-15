@@ -88,6 +88,7 @@ The loot list addon for OnyFans
 **** IT IS HIGHLY RECOMMENDED YOU HAVE [AtlasLoot](https://github.com/Lexiebean/AtlasLoot/) INSTALLED ****
 
 *** YOU MUST BE OFFICER OR GM IN ORDER TO IMPORT ****
+
 0. Steps 1-3 are optional if you are starting with a populated exlusion list - use exclude commands to populate it, if you have list drops logged. Use '/of exclude show' to check
 1. Go to the lootlist Google spreadsheet hit ctrl+a to highlight everything and ctrl+c to copy everything
 2. Paste a copy of the sheet in a completely new Google spreadsheet somewhere else. This is so you can modify it
