@@ -81,13 +81,14 @@ The loot list addon for OnyFans
 - /of autoinv - Periodically auto invites people from guild that also have a list into the raid group
 - /of exclude key - Adds items from list drops to exclusion list where key is a key from /of export help
 - /of exclude clear - Clears the current exlusion list and bumps the version up one. Use this if you are starting a brand new list
+- /of exclude show - Prints a list of what is in the exclude list
 - /of clear - Clears imported lists (but not tooltip lists). useful for removing nags if you are not importing lists but once did"
 
 ## How to Import From CSV
 **** IT IS HIGHLY RECOMMENDED YOU HAVE [AtlasLoot](https://github.com/Lexiebean/AtlasLoot/) INSTALLED ****
 
 *** YOU MUST BE OFFICER OR GM IN ORDER TO IMPORT ****
-0. Steps 1-3 are optional if you are starting with a populated exlusion list - use exclude commands to populate it, if you have list drops logged
+0. Steps 1-3 are optional if you are starting with a populated exlusion list - use exclude commands to populate it, if you have list drops logged. Use '/of exclude show' to check
 1. Go to the lootlist Google spreadsheet hit ctrl+a to highlight everything and ctrl+c to copy everything
 2. Paste a copy of the sheet in a completely new Google spreadsheet somewhere else. This is so you can modify it
 3. Delete any item cell that has strikethrough. Strikethrough is lost when converting to CSV, so get rid of any cell with it now
