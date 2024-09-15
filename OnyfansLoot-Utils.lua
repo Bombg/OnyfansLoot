@@ -518,7 +518,7 @@ function util:AtlasLootLoaded()
 end
 function util:IsPartOfRaidLootTable(raidBossKey)
     local isValid = false
-    local raidRegex = {'^MC','^BWL', '^AQ40', '^ES'} --  add '^NAX' at a later date
+    local raidRegex = {'^MC','^BWL', '^AQ40', '^ES', '^NAX'} 
     for i, v in ipairs(raidRegex) do
         if string.find(raidBossKey, v) then
             isValid = true
