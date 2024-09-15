@@ -71,15 +71,15 @@ SlashCmdList["OF"] = function(msg)
             OnyFansLoot.invitedList = {}
             DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: Auto Raid Inviting guild members with lists has been turned |cff9482c9off|r")
         end
-    elseif msg1 and msg2 and msg1 == 'exclude' and util:IsAllowedToImport() then
-        if util:DoesTableContainKey(OfDrops, msg2) then
+    elseif msg1 and msg2 and msg1 == 'exclude' then
+        if util:DoesTableContainKey(OfDrops, msg2) and util:IsAllowedToImport() then
             for i, v in ipairs(OfDrops[msg2]) do
                 for k, val in pairs(OfDrops[msg2][i]) do
                     util:AddToListExclusions(k, val)
                 end
             end
             DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: Added all the list drops from raid: |cff9482c9" .. msg2 .. "|r to exclusion list")
-        elseif msg2 == 'clear' then
+        elseif msg2 == 'clear' and util:IsAllowedToImport() then
             local exLength, exVersion = util:GetExclusionInfo(ListExclusions)
             ListExclusions = {}
             DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: Exlusion list " .. exVersion .. " has been cleared. New exlusion list version is now |cff9482c9" .. exVersion + 1 ..  "|r")
@@ -87,7 +87,7 @@ SlashCmdList["OF"] = function(msg)
         elseif msg2 == "show" then
             PrintExcludeList()
         else
-            DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: This raid key does not exist. Find one with the |cff9482c9'of export help'|r command")
+            DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: This raid key does not exist or not officer. Find a key with the |cff9482c9'of export help'|r command")
         end
 
     end
