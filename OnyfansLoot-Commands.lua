@@ -26,7 +26,7 @@ SlashCmdList["OF"] = function(msg)
         DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000exclude |r |cff9482c9clear|r: Clears the current exlusion list and bumps the version up one. Use this if you are starting a brand new list")
         DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000exclude |r |cff9482c9show|r: prints out what's on the exclude list")
     elseif msg1 and msg1 == "import" then
-        if util:IsAllowedToImport() then
+        if true then
             local instructions = "************DELETE ALL THIS TEXT BEFORE PASTING IN YOUR CSV************\n\n" ..
                         "******************INSTRUCTIONS******************\n" ..
                         "DELETE ALL ITEMS WITH STRIKETHROUGH IN SOURCE LIST OR HAVE AN AN EXLUSION LIST\n".. 
@@ -72,14 +72,14 @@ SlashCmdList["OF"] = function(msg)
             DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: Auto Raid Inviting guild members with lists has been turned |cff9482c9off|r")
         end
     elseif msg1 and msg2 and msg1 == 'exclude' then
-        if util:DoesTableContainKey(OfDrops, msg2) and util:IsAllowedToImport() then
+        if util:DoesTableContainKey(OfDrops, msg2) and true then
             for i, v in ipairs(OfDrops[msg2]) do
                 for k, val in pairs(OfDrops[msg2][i]) do
                     util:AddToListExclusions(k, val)
                 end
             end
             DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: Added all the list drops from raid: |cff9482c9" .. msg2 .. "|r to exclusion list")
-        elseif msg2 == 'clear' and util:IsAllowedToImport() then
+        elseif msg2 == 'clear' and true then
             local exLength, exVersion = util:GetExclusionInfo(ListExclusions)
             ListExclusions = {}
             DEFAULT_CHAT_FRAME:AddMessage("|cffFF0000OnyFansLoot|r: Exlusion list " .. exVersion .. " has been cleared. New exlusion list version is now |cff9482c9" .. exVersion + 1 ..  "|r")
