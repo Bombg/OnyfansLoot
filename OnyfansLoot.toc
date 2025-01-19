@@ -2,7 +2,7 @@
 ## Title: Onyfans Loot
 ## Notes: An addons that shows whose up next for loot
 ## Author: Bombg
-## Version: 0.4.3
+## Version: 0.4.4
 ## SavedVariables: OfLoot, OfDrops, Drops, ImportedTable, StagedOfLoot, ListExclusions
 
 # main
