@@ -25,7 +25,7 @@ SlashCmdList["OF"] = function(msg)
         DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000exclude |r |cff9482c9key|r: Adds items from list drops to exclusion list where key is a key from -of export help-")
         DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000exclude |r |cff9482c9clear|r: Clears the current exlusion list and bumps the version up one. Use this if you are starting a brand new list")
         DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000exclude |r |cff9482c9show|r: prints out what's on the exclude list")
-        DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000exclude |r |cff9482c9add:itemName:playerName|r: adds an item player name combo to the exclusion list. ex. /of exclude add:Heliosx:broken boar tusk")
+        DEFAULT_CHAT_FRAME:AddMessage(" - |cffFF0000exclude |r |cff9482c9add:itemName:playerName|r: adds an item player name combo to the exclusion list. ex. /of exclude add:broken boar tusk:Heliosx")
     elseif msg1 and msg1 == "import" then
         if util:IsAllowedToImport() then
             local instructions = "************DELETE ALL THIS TEXT BEFORE PASTING IN YOUR CSV************\n\n" ..
