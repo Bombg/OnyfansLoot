@@ -399,9 +399,6 @@ function util:CleanImportedTable()
                 ImportedTable[i][j] = ""
             end
         end
-        if string.lower(ImportedTable[i][lootStartsAt]) == string.lower(ImportedTable[i][lootStartsAt + 2]) then -- if -1 and 1 are the same then remove the 1. (since 1 gets upgraded to -1)
-            ImportedTable[i][lootStartsAt + 2] = ""
-        end
     end
 end
 
@@ -609,7 +606,7 @@ function util:GetLootModifier(i,j)
     if not self:IsEmptyString(ImportedTable[i][AttendanceModifierLoc])  then
         modifier = 0
         if j == lootStartsAt then
-            modifier = tonumber(ImportedTable[i][AttendanceModifierLoc]) + 1 -- +1 because people's #1 goes from 1 to -1, skipping 0
+            modifier = 0 -- First item on list is loot council. No modifier
         else
             modifier = tonumber(ImportedTable[i][AttendanceModifierLoc])
         end
