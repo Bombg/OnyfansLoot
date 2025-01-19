@@ -388,7 +388,7 @@ function util:ParseCsv(text, parent)
 end
 
 function util:CleanImportedTable()
-    local lootStartsAt = 7
+    local lootStartsAt = 6
     local notHeader = 2
     for i = notHeader, table.getn(ImportedTable) do
         for j = lootStartsAt, table.getn(ImportedTable[i]) do
@@ -418,7 +418,7 @@ function util:GetInvalidGuildMemberNames()
 end
 
 function util:GetInvalidItemNames()
-    local lootStartsAt = 7
+    local lootStartsAt = 6
     local listsStartAt = 2
     local invalidItems = "---------------------------------------------------------------------------------\nThese items are spelled incorrectly or are not on active raids loot list\n\nInvalid Item Names:\n\n"
     local invalidItemsDummy = "---------------------------------------------------------------------------------\nThese items are spelled incorrectly or are not on active raids loot list\n\nInvalid Item Names:\n\n"
@@ -559,7 +559,7 @@ end
 function util:StageImportedList()
     OnyFansLoot.isStaged = true
     StagedOfLoot = {}
-    local lootStartsAt = 7
+    local lootStartsAt = 6
     local notHeader = 2
     local version = self:GetListVersion(OfLoot)
     StagedOfLoot["version"] = {}
@@ -599,7 +599,7 @@ end
 
 function util:GetLootModifier(i,j)
     local AttendanceModifierLoc = 5
-    local lootStartsAt = 7
+    local lootStartsAt = 6
     local lootLivePos = 3
     local oneTwoLivePos = 4
     local modifier = nil
