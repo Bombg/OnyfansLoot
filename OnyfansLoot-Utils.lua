@@ -606,7 +606,7 @@ function util:GetLootModifier(i,j)
     if not self:IsEmptyString(ImportedTable[i][AttendanceModifierLoc])  then
         modifier = 0
         if j == lootStartsAt then
-            modifier = 0 -- First item on list is loot council. No modifier
+            modifier = -100 -- First item on list is loot council. Always wins
         else
             modifier = tonumber(ImportedTable[i][AttendanceModifierLoc])
         end
@@ -717,7 +717,7 @@ function util:CreateItemList(lootTable, itemName)
         end
     end
 
-    for i = 1, 20 do
+    for i = -200, 100, 0.125 do -- -starting at -200 since legacy list items start at -100, and incrementing by 0.125 because attendance increments by that much
         if not util:IsEmptyString(listArr[i]) then
             list = list .. tostring(j) .. ": " .. listArr[i] .. "\n"
             j = j + 1

@@ -42,15 +42,21 @@ end
 
 function CheckVersionAddLine(listVersion, Tooltip, itemName)
     local numExlusions = OnyFansLoot.util:GetNumOfExlusions(itemName)
+    local listDate
     if OnyFansLoot.isStaged then
         Tooltip:AddLine("Staged: Uncommited changes",1,0,0)
+    end
+    if OfLoot["version"] == nil then
+        listDate = date("%m-%d-%y")
+    else
+        listDate = OfLoot["version"][2]
     end
     local listTitle  = "|cffFF0000List#|r"
     local dateTitle = "|cffFF0000#Date#|r"
     local excludingTitle = "|cffFF0000#Excluding#|r"
     local namesFoot = "|cffFF0000#Names|r"
     local pListVersion = "|cff9482c9" .. listVersion .. "|r"
-    local pDate = "|cff9482c9" .. OfLoot["version"][2] .. "|r"
+    local pDate = "|cff9482c9" .. listDate .. "|r"
     local pNumExclusions = "|cff9482c9" .. numExlusions .. "|r"
     if listVersion > 0 then
         Tooltip:AddLine(listTitle ..pListVersion ..dateTitle .. pDate .. excludingTitle .. pNumExclusions .. namesFoot) 
